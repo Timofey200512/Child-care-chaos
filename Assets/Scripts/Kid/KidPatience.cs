@@ -16,6 +16,7 @@ public class KidPatience : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         const int emotionsAmount = 3;
         _changeTimeSeconds = patienceSeconds / emotionsAmount;
+        //StartCoroutine(StartWaiting());
     }
     
     public IEnumerator StartWaiting()
