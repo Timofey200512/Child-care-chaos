@@ -20,7 +20,7 @@ public class KidNavigation : MonoBehaviour
         StartCoroutine(Wander());
     }
 
-    private IEnumerator Wander()
+    public IEnumerator Wander()
     {
         while (true)
         {

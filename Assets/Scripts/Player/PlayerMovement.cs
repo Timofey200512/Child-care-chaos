@@ -21,13 +21,14 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         input = new Vector2(horizontal, vertical).normalized;
 
+        // flip sprite direction on input change
         if (horizontal > 0f)
         {
-            spriteRenderer.flipX = false;
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
         else if (horizontal < 0f)
         {
-            spriteRenderer.flipX = true;
+            transform.localScale = new Vector3(-1f, 1f, 1f);
         }
     }
 
@@ -36,5 +37,8 @@ public class PlayerMovement : MonoBehaviour
         rigBody.MovePosition(rigBody.position + input * (speed * Time.fixedDeltaTime));
     }
 
-    public bool IsFacingLeft => spriteRenderer != null && spriteRenderer.flipX;
+    public int GetFacingDirection()
+    {
+        return (int)transform.localScale.x;
+    }
 }
