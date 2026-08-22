@@ -26,12 +26,12 @@ public class PlayerHolder : MonoBehaviour
         _playerSpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Hold(GameObject item)
+    public void Hold(GameObject item, Sprite sprite)
      {
          item.gameObject.SetActive(false);
          holdingItem.SetActive(true);
          _playerSpriteRenderer.sprite = holdingPlayerSprite;
-         holdingItemSpriteRenderer.sprite = item.GetComponent<SpriteRenderer>().sprite;
+         holdingItemSpriteRenderer.sprite = sprite;
          originalItem = item;
          gotItem = true;
      }

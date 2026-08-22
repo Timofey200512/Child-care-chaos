@@ -5,9 +5,11 @@ public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable
 {
     private KidNavigation _kidNavigation;
     private NavMeshAgent _agent;
+    private Sprite sprite;
 
     private void Start()
     {
+        sprite = GetComponent<SpriteRenderer>().sprite;
         _kidNavigation = GetComponent<KidNavigation>();
         _agent = GetComponent<NavMeshAgent>();
     }
@@ -15,7 +17,7 @@ public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable
     public void OnLeftButtonClicked()
     {
         _agent.enabled = false;
-        PlayerHolder.instance.Hold(gameObject);
+        PlayerHolder.instance.Hold(gameObject, sprite);
     }
 
     public void OnDrop(Vector2 newPosition)

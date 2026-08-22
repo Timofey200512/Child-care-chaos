@@ -47,6 +47,9 @@ TagManager:
   - name: Furniture
     uniqueID: 1354331123
     locked: 0
+  - name: Pickable item
+    uniqueID: 3526782783
+    locked: 0
   - name: Player
     uniqueID: 1893762525
     locked: 0
