@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 409441299}
   - component: {fileID: 409441304}
   - component: {fileID: 409441305}
+  - component: {fileID: 409441306}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -826,9 +827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07bd382d82044cfc8329604eb01c4aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Highlighter
-  overlapBoxOffset: {x: 1, y: 0}
-  overlapBoxSize: {x: 1, y: 1}
-  boxOverlapped: 0
 --- !u!114 &409441305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +842,20 @@ MonoBehaviour:
   holdingPlayerSprite: {fileID: 340222802590416468, guid: fcbeb3b68611eaa4da1904ad0cc017fd, type: 3}
   defaultPlayerSprite: {fileID: -7349669654771352569, guid: 211c6d67d8f6ff84e9580547256e4216, type: 3}
   holdingItem: {fileID: 561483627}
+--- !u!114 &409441306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409441296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4503c738ed4b874e9f0844cd559e4fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoxOverlapDetector
+  overlapBoxOffset: {x: 1.04, y: 0}
+  overlapBoxSize: {x: 1, y: 1}
 --- !u!1001 &456524726
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1481,6 +1493,7 @@ GameObject:
   - component: {fileID: 644669458}
   - component: {fileID: 644669459}
   - component: {fileID: 644669461}
+  - component: {fileID: 644669462}
   m_Layer: 0
   m_Name: kid 1
   m_TagString: Untagged
@@ -1688,6 +1701,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d6a897d6782ee34898a567d52865740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!114 &644669462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644669453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
+  minTimeBetweenWaits: 1
+  maxTimeBetweenWaits: 3
 --- !u!1001 &660841672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5938,6 +5965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0973ca21539a94bb7e759b2bacfbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputGetter
+  ActionKey: 102
 --- !u!4 &1952413450
 Transform:
   m_ObjectHideFlags: 0

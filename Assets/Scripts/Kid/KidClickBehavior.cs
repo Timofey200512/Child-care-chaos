@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable
+public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable, IActionClickable
 {
     private KidNavigation _kidNavigation;
     private NavMeshAgent _agent;
-    private Sprite sprite;
+    private Sprite kidSprite;
+    private KidPatience kidPatience;
 
     private void Start()
     {
-        sprite = GetComponent<SpriteRenderer>().sprite;
+        kidPatience = GetComponent<KidPatience>();
+        kidSprite = GetComponent<SpriteRenderer>().sprite;
         _kidNavigation = GetComponent<KidNavigation>();
         _agent = GetComponent<NavMeshAgent>();
     }
@@ -17,7 +19,16 @@ public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable
     public void OnLeftButtonClicked()
     {
         _agent.enabled = false;
-        PlayerHolder.instance.Hold(gameObject, sprite);
+        PlayerHolder.instance.Hold(gameObject, kidSprite);
+    }
+
+    public void OnActionButtonPressed()
+    {
+        if (PlayerHolder.instance.Item.CompareTag("Food"))
+        {
+            kidPatience.SatisfyDesire();
+            PlayerHolder.instance.DeleteItem();
+        }
     }
 
     public void OnDrop(Vector2 newPosition)

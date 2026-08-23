@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class InputGetter : MonoBehaviour
 {
+    [SerializeField] private KeyCode ActionKey = KeyCode.F;
     public static InputGetter instance;
     public event Action OnLeftMousePressed;
     public event Action OnRightMousePressed;
+    public event Action OnActionMousePressed;
     private void Awake()
     {
         instance = this;
@@ -22,5 +24,11 @@ public class InputGetter : MonoBehaviour
         {
             OnRightMousePressed?.Invoke();
         }
+
+        if (Input.GetKeyDown(ActionKey))
+        {
+            OnActionMousePressed?.Invoke();
+        }
     }
+
 }

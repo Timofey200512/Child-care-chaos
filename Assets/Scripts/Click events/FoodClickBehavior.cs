@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class FoodClickBehavior : MonoBehaviour, ILeftClickable,IDropable
+public class FoodClickBehavior : MonoBehaviour, ILeftClickable, IDropable
 {
     private Sprite sprite;
 

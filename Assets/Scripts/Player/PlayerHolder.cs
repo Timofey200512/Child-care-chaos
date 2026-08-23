@@ -15,6 +15,8 @@ public class PlayerHolder : MonoBehaviour
     private bool gotItem;
     public bool GotItem => gotItem;
 
+    public GameObject Item => originalItem;
+
     private void Awake()
     {
         instance = this;
@@ -42,7 +44,15 @@ public class PlayerHolder : MonoBehaviour
         _playerSpriteRenderer.sprite = defaultPlayerSprite;
         originalItem.gameObject.SetActive(true);
         var newPosition = holdingItem.transform.position;
-        originalItem.GetComponent<IDropable>().OnDrop(newPosition);
+        Item.GetComponent<IDropable>().OnDrop(newPosition);
+        gotItem = false;
+    }
+
+    public void DeleteItem()
+    {
+        Destroy(originalItem);
+        _playerSpriteRenderer.sprite = defaultPlayerSprite;
+        holdingItem.SetActive(false);
         gotItem = false;
     }
 }
