@@ -63,7 +63,7 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped)
         {
-            collider.GetComponent<IActionClickable>().OnActionButtonPressed();
+            collider.GetComponent<IActionClickable>()?.OnActionButtonPressed();
         }
     }
     

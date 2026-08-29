@@ -22,7 +22,7 @@ public class KidDesiresManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(minTimeBetweenWaits, maxTimeBetweenWaits));
-            yield return StartCoroutine(_kidPatience.StartWaiting());
+            yield return _kidPatience.StartWaiting();
         }
     }
 }

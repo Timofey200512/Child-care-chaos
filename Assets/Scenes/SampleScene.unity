@@ -1589,10 +1589,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd47c888e31a8845b6e1097abdea766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  patienceSeconds: 5
+  patienceSeconds: 6
   happyFace: {fileID: 21300000, guid: 0859df7202a1020479a1a3fefaf53b89, type: 3}
   neutralFace: {fileID: 21300000, guid: ed9bd2a653101bd478a7313439dd2e92, type: 3}
   sadFace: {fileID: 21300000, guid: 2a08bd16283c8934b8bb70b412da3b5b, type: 3}
+  desireBubble: {fileID: 1909380867}
+  desireSpriteRenderer: {fileID: 1813022224}
+  desire: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
 --- !u!195 &644669457
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1713,7 +1716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
-  minTimeBetweenWaits: 1
+  minTimeBetweenWaits: 2
   maxTimeBetweenWaits: 3
 --- !u!1001 &660841672
 PrefabInstance:
@@ -5662,6 +5665,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 100d410fc882aa54baa04c0008567db9, type: 3}
+--- !u!212 &1813022224 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2523277025213641050, guid: 940b8b7d7d0a38b4bbd2b2f78f000650, type: 3}
+  m_PrefabInstance: {fileID: 812613695489863869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1819035853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5862,6 +5870,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1d5af3a4d8a02345a39bc14cad0453e, type: 3}
+--- !u!1 &1909380867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5191510138248949226, guid: 940b8b7d7d0a38b4bbd2b2f78f000650, type: 3}
+  m_PrefabInstance: {fileID: 812613695489863869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1912448629
 PrefabInstance:
   m_ObjectHideFlags: 0

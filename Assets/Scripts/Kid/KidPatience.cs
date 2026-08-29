@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -12,20 +11,32 @@ public class KidPatience : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private float _changeTimeSeconds;
+    
+    [SerializeField] private GameObject desireBubble;
+    [SerializeField] private SpriteRenderer desireSpriteRenderer;
+    [SerializeField] private Sprite desire;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _changeTimeSeconds = patienceSeconds / 3f;
     }
+
+    private bool _stopRequested;
+
     public IEnumerator StartWaiting()
     {
+        _stopRequested = false;
+        print("Starting waiting");
+        desireBubble.SetActive(true);
+        desireSpriteRenderer.sprite = desire;
+        
         _spriteRenderer.sprite = happyFace;
 
         float elapsedSeconds = 0f;
         int emotionStage = 0;
 
-        while (elapsedSeconds < patienceSeconds)
+        while (elapsedSeconds < patienceSeconds && !_stopRequested)
         {
             elapsedSeconds += Time.deltaTime;
 
@@ -42,12 +53,19 @@ public class KidPatience : MonoBehaviour
 
             yield return null;
         }
-        print("desire not satisfied");
+        FinishWaiting();
     }
 
     public void SatisfyDesire()
     {
-        StopCoroutine(StartWaiting());
+        print("Satisfied Desire");
+        _stopRequested = true;
+        FinishWaiting();
+    }
+
+    private void FinishWaiting()
+    {
+        desireBubble.SetActive(false);
         _spriteRenderer.sprite = happyFace;
     }
 }
