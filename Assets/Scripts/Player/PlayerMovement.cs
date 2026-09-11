@@ -5,12 +5,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
     private SpriteRenderer spriteRenderer;
-    private Rigidbody2D rigBody;
-    private Vector2 input;
+    private Rigidbody rigBody;
+    private Vector3 input;
 
     private void Awake()
     {
-        rigBody = GetComponent<Rigidbody2D>();
+        rigBody = GetComponent<Rigidbody>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -19,16 +19,19 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        input = new Vector2(horizontal, vertical).normalized;
+        input = new Vector3(horizontal, 0, vertical).normalized;
 
-        // flip sprite direction on input change
+        // flip sprite direction on input change transform is used instead of sprite renderer because
+        // children should change their position as well when player is facing different directions
         if (horizontal > 0f)
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            float xScale = Mathf.Abs(transform.localScale.x);
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
         else if (horizontal < 0f)
         {
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            float xScale = Mathf.Abs(transform.localScale.x);
+            transform.localScale = new Vector3(-xScale, transform.localScale.y, transform.localScale.z);
         }
     }
 

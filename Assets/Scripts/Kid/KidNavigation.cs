@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 public class KidNavigation : MonoBehaviour
 {
     private NavMeshAgent _agent;
+    private bool _isGoingToTarget;
     [SerializeField] private NavMeshSurface surface;
     [SerializeField] private float idlWaitTimeSeconds = 3f;
     
@@ -26,11 +27,23 @@ public class KidNavigation : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(0f, idlWaitTimeSeconds));
 
+            if (_isGoingToTarget)
+            {
+                continue;
+            }
+
             Vector3 randomPosition = GetRandomPointOnNavMesh();
             _agent.SetDestination(randomPosition);
 
             while (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance)
+            {
+                if (_isGoingToTarget)
+                {
+                    break;
+                }
+
                 yield return null;
+            }
         }
     }
 
@@ -38,27 +51,45 @@ public class KidNavigation : MonoBehaviour
     {
         Bounds bounds = new Bounds(
             surface.transform.TransformPoint(surface.center),
-            Vector3.Scale(surface.size, surface.transform.lossyScale)
-        );
+            Vector3.Scale(surface.size, surface.transform.lossyScale));
 
         for (int i = 0; i < 30; i++)
         {
-            Vector3 randomPoint = new Vector3(
-                Random.Range(bounds.min.x, bounds.max.x),
-                Random.Range(bounds.min.y, bounds.max.y),
-                0f
-            );
+            Vector3 randomPoint = new Vector3(Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y, bounds.max.y), 0f);
 
-            if (NavMesh.SamplePosition(
-                    randomPoint,
+            if (NavMesh.SamplePosition(randomPoint, 
                     out NavMeshHit hit,
-                    0.5f,
-                    NavMesh.AllAreas))
+                    0.5f, NavMesh.AllAreas))
             {
                 return hit.position;
             }
         }
 
         return bounds.center;
+    }
+
+    public IEnumerator GoTowards(Vector3 newPosition)
+    {
+        Vector3 destination = newPosition;
+        if (NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+        {
+            destination = hit.position;
+        }
+
+        _isGoingToTarget = true;
+        _agent.SetDestination(destination);
+
+        while (_agent.pathPending)
+        {
+            yield return null;
+        }
+
+        while (_agent.isOnNavMesh && _agent.remainingDistance > _agent.stoppingDistance)
+        {
+            yield return null;
+        }
+
+        _isGoingToTarget = false;
     }
 }

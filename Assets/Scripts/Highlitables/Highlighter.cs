@@ -15,9 +15,9 @@ public class Highlighter : MonoBehaviour
         _boxOverlapDetector.OnOnOverlap += DeHighlight;
     }
 
-    private void Highlight(Collider2D collider)
+    private void Highlight(Collider collider)
     {
-        if (collider.TryGetComponent<IHighlightable>(out var highlightable) == true)
+        if (collider.TryGetComponent<IHighlightable>(out var highlightable))
         {
             highlightable.OnHighlighted();
             _highlightedObject = highlightable;

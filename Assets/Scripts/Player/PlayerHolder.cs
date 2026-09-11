@@ -29,14 +29,14 @@ public class PlayerHolder : MonoBehaviour
     }
 
     public void Hold(GameObject item, Sprite sprite)
-     {
+    {
          item.gameObject.SetActive(false);
          holdingItem.SetActive(true);
          _playerSpriteRenderer.sprite = holdingPlayerSprite;
          holdingItemSpriteRenderer.sprite = sprite;
          originalItem = item;
          gotItem = true;
-     }
+    }
 
     public void Drop()
     {

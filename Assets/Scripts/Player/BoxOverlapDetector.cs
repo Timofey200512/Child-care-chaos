@@ -1,15 +1,15 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class BoxOverlapDetector : MonoBehaviour
 {
-
     private PlayerMovement _playerMovement;
-    [SerializeField] private Vector2 overlapBoxOffset;
-    [SerializeField] private Vector2 overlapBoxSize = Vector2.one;
+    [SerializeField] private Vector3 overlapBoxOffset;
+    [SerializeField] private Vector3 overlapBoxSize = Vector3.one;
     private bool boxOverlapped;
-    private Collider2D collider;
-    public event Action<Collider2D> OnOverlap;
+    private Collider collider;
+    public event Action<Collider> OnOverlap;
     public event Action OnOnOverlap;
     private void Start()
     {
@@ -22,12 +22,12 @@ public class BoxOverlapDetector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 facingOffset = GetFacingOffset();
-        collider = Physics2D.OverlapBox(
-            (Vector2)transform.position + facingOffset,
-            overlapBoxSize,
-            0f);
-        
+        Collider[] colliders = Physics.OverlapBox(
+            transform.position + GetFacingOffset(),
+            overlapBoxSize / 2,
+            Quaternion.identity);
+
+        collider = FindClosestCollider(colliders);
         if (collider)
         {
             boxOverlapped = true;
@@ -39,16 +39,35 @@ public class BoxOverlapDetector : MonoBehaviour
             OnOnOverlap?.Invoke();
         }
     }
-    
-    private Vector2 GetFacingOffset()
+
+    private Collider FindClosestCollider(Collider[] colliders)
     {
-        return new Vector2(Mathf.Abs(overlapBoxOffset.x) * _playerMovement.GetFacingDirection(), overlapBoxOffset.y);
+        Collider closestCollider = null;
+        float closestDistance = float.MaxValue;
+        foreach (var overlapCollider in colliders)
+        {
+            var distance = Vector3.Distance(overlapCollider.transform.position, transform.position);
+            if (distance < closestDistance)
+            {
+                closestCollider = overlapCollider;
+                closestDistance = distance;
+            }
+        }
+        return closestCollider;
+    }
+
+    private Vector3 GetFacingOffset()
+    {
+        return new Vector3(Mathf.Abs(overlapBoxOffset.x) * _playerMovement.GetFacingDirection(), overlapBoxOffset.y, overlapBoxOffset.z);
     }
     
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireCube((Vector2)transform.position + GetFacingOffset(), overlapBoxSize);
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireCube(transform.position + GetFacingOffset(), overlapBoxSize);
+        }
     }
     
     private void OnLeftMousePressed()
