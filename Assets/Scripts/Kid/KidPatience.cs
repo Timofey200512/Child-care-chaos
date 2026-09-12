@@ -1,6 +1,9 @@
 using System.Collections;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Windows;
+using NavMeshPlus.Components;
+using NavMeshSurface = NavMeshPlus.Components.NavMeshSurface;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(KidNavigation))]
@@ -20,9 +23,11 @@ public class KidPatience : MonoBehaviour
     [SerializeField] private Sprite cryFace;
     private KidNavigation kidNavigation;
     [SerializeField] private float minThrowAngle = 20f;
+    [SerializeField] private NavMeshSurface surface;
 
     private void Awake()
     {
+        surface = GameObject.FindAnyObjectByType<NavMeshSurface>();
         kidNavigation = GetComponent<KidNavigation>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _changeTimeSeconds = patienceSeconds / 3f;
@@ -89,16 +94,18 @@ public class KidPatience : MonoBehaviour
             // go towards it
             yield return kidNavigation.GoTowards(chair.transform.position);
             // grab it
-            chair.transform.SetParent(transform);
-            chair.transform.localPosition = new Vector3(0f, 1f, 0f);
+            chair.transform.parent.SetParent(transform);
+            chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
+            chair.transform.localPosition = Vector3.zero;
 
             var chairRigidBody = chair.GetComponent<Rigidbody>();
             chairRigidBody.isKinematic = true;
 
             yield return new WaitForSeconds(1);
+            surface.BuildNavMesh();
             
             // throw it
-            chair.transform.SetParent(null);
+            chair.transform.parent.SetParent(null);
             chairRigidBody.isKinematic = false;
             chair.transform.localScale = new Vector3(1f, 1f, 1f);
             
