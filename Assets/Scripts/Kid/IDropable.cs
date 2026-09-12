@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDropable
 {
-    void OnDrop(Vector2 newPosition);
+    void OnDrop(Vector3 newPosition);
 }

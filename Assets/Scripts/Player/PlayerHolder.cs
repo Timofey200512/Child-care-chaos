@@ -44,7 +44,8 @@ public class PlayerHolder : MonoBehaviour
         _playerSpriteRenderer.sprite = defaultPlayerSprite;
         originalItem.gameObject.SetActive(true);
         var newPosition = holdingItem.transform.position;
-        Item.GetComponent<IDropable>().OnDrop(newPosition);
+        print("new position: " + newPosition);
+        Item.GetComponentInChildren<IDropable>().OnDrop(newPosition);
         gotItem = false;
     }
 

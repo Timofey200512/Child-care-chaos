@@ -31,7 +31,7 @@ public class KidClickBehavior : MonoBehaviour, ILeftClickable, IDropable, IActio
         }
     }
 
-    public void OnDrop(Vector2 newPosition)
+    public void OnDrop(Vector3 newPosition)
     {
         _agent.Warp(newPosition);
         _agent.enabled = true;

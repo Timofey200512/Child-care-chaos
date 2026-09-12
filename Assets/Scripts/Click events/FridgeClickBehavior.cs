@@ -1,19 +1,13 @@
 using System;
 using UnityEngine;
 
-public class FridgeClickBehavior : MonoBehaviour, ILeftClickable
+public class FridgeClickBehavior : MonoBehaviour, IActionClickable
 {
     [SerializeField] private GameObject food;
-    private Sprite foodSprite;
+    [SerializeField] private Sprite foodSprite;
 
-    private void Start()
-    {
-        foodSprite = food.GetComponent<SpriteRenderer>().sprite;
-    }
-
-    public void OnLeftButtonClicked()
+    public void OnActionButtonPressed()
     {
         PlayerHolder.instance.Hold(Instantiate(food), foodSprite);
     }
-    
 }

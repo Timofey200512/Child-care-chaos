@@ -1152,12 +1152,13 @@ GameObject:
   m_Component:
   - component: {fileID: 409441298}
   - component: {fileID: 409441297}
+  - component: {fileID: 409441307}
+  - component: {fileID: 409441308}
   - component: {fileID: 409441299}
   - component: {fileID: 409441304}
   - component: {fileID: 409441305}
   - component: {fileID: 409441306}
-  - component: {fileID: 409441307}
-  - component: {fileID: 409441308}
+  - component: {fileID: 409441309}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -1294,7 +1295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxOverlapDetector
   overlapBoxOffset: {x: 1.04, y: 1, z: 0}
-  overlapBoxSize: {x: 1, y: 1, z: 1}
+  overlapBoxSize: {x: 1, y: 1.86, z: 1}
 --- !u!136 &409441307
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1345,6 +1346,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &409441309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409441296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da482631560bed8489cde0d12bf45eea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  playerPreparesToAttackSprite: {fileID: 2983642798115808518, guid: a5903310d47cde545b9726086c0c5db2, type: 3}
+  playerAttackedSprite: {fileID: 5390494424514669673, guid: a2bb4580ded424e4aab5f5f6a89b4bd1, type: 3}
 --- !u!1001 &422018996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1974,7 +1989,7 @@ Transform:
   m_GameObject: {fileID: 561483627}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.235, y: 0, z: 0}
+  m_LocalPosition: {x: 0.25, y: 0.5, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2275,7 +2290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd47c888e31a8845b6e1097abdea766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  patienceSeconds: 0
+  patienceSeconds: 6
   happyFace: {fileID: 21300000, guid: 0859df7202a1020479a1a3fefaf53b89, type: 3}
   neutralFace: {fileID: 21300000, guid: ed9bd2a653101bd478a7313439dd2e92, type: 3}
   sadFace: {fileID: 21300000, guid: 2a08bd16283c8934b8bb70b412da3b5b, type: 3}
@@ -2284,7 +2299,6 @@ MonoBehaviour:
   desire: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
   cryFace: {fileID: -7475459481402553172, guid: 96637e2a71002e642ad8a776a01639f3, type: 3}
   minThrowAngle: 20
-  surface: {fileID: 0}
   throwingForce: 5
 --- !u!195 &644669457
 NavMeshAgent:
@@ -2360,8 +2374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
-  minTimeBetweenWaits: 1
-  maxTimeBetweenWaits: 1
+  minTimeBetweenWaits: 3
+  maxTimeBetweenWaits: 6
 --- !u!136 &644669463
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7790,6 +7804,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6820157802868397934, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
+      propertyPath: food
+      value: 
+      objectReference: {fileID: 49047277871295116, guid: 1da4a133537c023499e1c8999e03ad2a, type: 3}
+    - target: {fileID: 6820157802868397934, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
+      propertyPath: foodSprite
+      value: 
+      objectReference: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

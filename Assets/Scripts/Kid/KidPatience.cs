@@ -23,7 +23,7 @@ public class KidPatience : MonoBehaviour
     [SerializeField] private Sprite cryFace;
     private KidNavigation kidNavigation;
     [SerializeField] private float minThrowAngle = 20f;
-    [SerializeField] private NavMeshSurface surface;
+    private NavMeshSurface surface;
 
     private void Awake()
     {
@@ -65,6 +65,8 @@ public class KidPatience : MonoBehaviour
 
             yield return null;
         }
+
+        if (satisfied) yield break;
         yield return Cry();
     }
 

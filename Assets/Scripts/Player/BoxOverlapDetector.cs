@@ -74,7 +74,7 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped && !PlayerHolder.instance.GotItem)
         {
-            collider.GetComponent<ILeftClickable>().OnLeftButtonClicked();
+            collider.GetComponent<ILeftClickable>()?.OnLeftButtonClicked();
         }
     }
     
