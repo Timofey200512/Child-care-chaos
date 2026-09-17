@@ -14,7 +14,11 @@ public class Spanker : MonoBehaviour
     
     public void Spank()
     {
-        // use overlap detector to detect kid and deal damage on it if overlaped
+        // show attack sprites
+        
+        // use overlap detector 
+        
+        // deal damage on it if overlaped
         throw new NotImplementedException();
     }
 }

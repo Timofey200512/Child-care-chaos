@@ -23,10 +23,11 @@ public class KidDesiresManager : MonoBehaviour
     {
         while (true)
         {
+            // пока не чего не происходит и пока wait for seconds возврощается ребенок гуляет из за wander функции которая
+            // вызвана в kid navigation в начале
             yield return new WaitForSeconds(Random.Range(minTimeBetweenWaits, maxTimeBetweenWaits));
             yield return _kidPatience.StartWaiting();
             print("exited waiting");
-            //yield return kidNavigation.Wander();
         }
     }
 }

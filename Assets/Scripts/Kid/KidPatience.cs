@@ -16,11 +16,14 @@ public class KidPatience : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private float _changeTimeSeconds;
+    private Color _defaultColor;
+    private Coroutine damageFlashCoroutine;
 
     [SerializeField] private GameObject desireBubble;
     [SerializeField] private SpriteRenderer desireSpriteRenderer;
     [SerializeField] private Sprite desire;
     [SerializeField] private Sprite cryFace;
+    [SerializeField] private float damageRedSeconds = 0.25f;
     private KidNavigation kidNavigation;
     [SerializeField] private float minThrowAngle = 20f;
     private NavMeshSurface surface;
@@ -31,6 +34,7 @@ public class KidPatience : MonoBehaviour
         surface = GameObject.FindAnyObjectByType<NavMeshSurface>();
         kidNavigation = GetComponent<KidNavigation>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _defaultColor = _spriteRenderer.color;
         _changeTimeSeconds = patienceSeconds / 3f;
     }
     
@@ -134,12 +138,15 @@ public class KidPatience : MonoBehaviour
     {            
         if (cryCoroutine != null)
         {
+            _spriteRenderer.sprite = happyFace;
             print("Cry coroutine: " + cryCoroutine);
-            cryCoroutine.CancelCoroutine();
+            cryCoroutine.CancelCoroutine(); // something here takes a lot of time
             kidNavigation.StopWalking();
             chair.transform.parent.SetParent(null);
-            chairRigidBody.isKinematic = false;
-            _spriteRenderer.sprite = happyFace;
+            if (chairRigidBody)
+            {
+                chairRigidBody.isKinematic = false;
+            }
             cryCoroutine = null;
         }
     }
@@ -148,12 +155,31 @@ public class KidPatience : MonoBehaviour
     [ContextMenu("Take damage test")]
     public void TakeDamage() // работает
     {
+        FlashDamageRed();
         _amountOfSpanks++;
+        print("amount of spanks: " + _amountOfSpanks);
         if (_amountOfSpanks == 1)
         {
-            print("amount of spanks: " + _amountOfSpanks);
             StopCrying();
+            _amountOfSpanks = 0;
         }
-        _amountOfSpanks = 0;
+    }
+
+    private void FlashDamageRed()
+    {
+        if (damageFlashCoroutine != null)
+        {
+            StopCoroutine(damageFlashCoroutine);
+        }
+
+        damageFlashCoroutine = StartCoroutine(DamageFlash());
+    }
+
+    private IEnumerator DamageFlash()
+    {
+        _spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(damageRedSeconds);
+        _spriteRenderer.color = _defaultColor;
+        damageFlashCoroutine = null;
     }
 }
