@@ -47,6 +47,48 @@ public class KidNavigation : MonoBehaviour
         }
     }
 
+    public IEnumerator Wander(float wanderTimeSecond)
+    {
+        float endTime = Time.time + wanderTimeSecond;
+
+        while (Time.time < endTime)
+        {
+            float waitEndTime = Time.time + Random.Range(0f, idlWaitTimeSeconds);
+
+            while (Time.time < waitEndTime && Time.time < endTime)
+            {
+                yield return null;
+            }
+
+            if (Time.time >= endTime)
+            {
+                break;
+            }
+
+            if (_isGoingToTarget)
+            {
+                continue;
+            }
+
+            Vector3 randomPosition = GetRandomPointOnNavMesh();
+            _agent.SetDestination(randomPosition);
+
+            while ((_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance) && Time.time < endTime)
+            {
+                if (_isGoingToTarget)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+        }
+
+        if (!_isGoingToTarget)
+        {
+            StopWalking();
+        }
+    }
     private Vector3 GetRandomPointOnNavMesh()
     {
         Bounds bounds = new Bounds(
@@ -91,5 +133,10 @@ public class KidNavigation : MonoBehaviour
         }
 
         _isGoingToTarget = false;
+    }
+
+    public void StopWalking()
+    {
+        _agent.SetDestination(transform.position);
     }
 }

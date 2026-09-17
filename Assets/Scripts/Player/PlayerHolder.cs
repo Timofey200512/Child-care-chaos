@@ -26,6 +26,7 @@ public class PlayerHolder : MonoBehaviour
     {
         holdingItemSpriteRenderer = holdingItem.GetComponent<SpriteRenderer>();
         _playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        InputGetter.instance.OnLeftMousePressed += UseHoldingItem;
     }
 
     public void Hold(GameObject item, Sprite sprite)
@@ -56,4 +57,19 @@ public class PlayerHolder : MonoBehaviour
         holdingItem.SetActive(false);
         gotItem = false;
     }
+
+    private void UseHoldingItem()
+    {
+        if (!gotItem) return;
+        if (originalItem.TryGetComponent<IUsable>(out var usable))
+        {
+            holdingItem.SetActive(false);          
+            usable.Use();
+        }
+    }
+}
+
+public interface IUsable
+{
+    void Use();
 }

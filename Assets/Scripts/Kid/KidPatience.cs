@@ -16,7 +16,7 @@ public class KidPatience : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private float _changeTimeSeconds;
-    
+
     [SerializeField] private GameObject desireBubble;
     [SerializeField] private SpriteRenderer desireSpriteRenderer;
     [SerializeField] private Sprite desire;
@@ -24,6 +24,7 @@ public class KidPatience : MonoBehaviour
     private KidNavigation kidNavigation;
     [SerializeField] private float minThrowAngle = 20f;
     private NavMeshSurface surface;
+    private CancellableCoroutine cryCoroutine;
 
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class KidPatience : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _changeTimeSeconds = patienceSeconds / 3f;
     }
-
+    
     private bool satisfied;
     [SerializeField] private float throwingForce = 1;
 
@@ -67,7 +68,8 @@ public class KidPatience : MonoBehaviour
         }
 
         if (satisfied) yield break;
-        yield return Cry();
+        cryCoroutine = new CancellableCoroutine(Cry());
+        yield return cryCoroutine.Run();
     }
 
     public void SatisfyDesire()
@@ -83,24 +85,26 @@ public class KidPatience : MonoBehaviour
         _spriteRenderer.sprite = happyFace;
     }
 
+    private GameObject chair;
+    private Rigidbody chairRigidBody;
     private IEnumerator Cry()
     {
-        //while (!satisfied)
-        //{
+        // find chair
+        chair = GameObject.FindWithTag("Chair");
+        while (!satisfied)
+        {
             print("Crying Cry");
             // set cry sprite
             _spriteRenderer.sprite = cryFace;
             desireBubble.SetActive(false);
-            // find chair
-            GameObject chair = GameObject.FindWithTag("Chair");
-            // go towards it
+            // go towards chair
             yield return kidNavigation.GoTowards(chair.transform.position);
             // grab it
             chair.transform.parent.SetParent(transform);
             chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
             chair.transform.localPosition = Vector3.zero;
 
-            var chairRigidBody = chair.GetComponent<Rigidbody>();
+            chairRigidBody = chair.GetComponent<Rigidbody>();
             chairRigidBody.isKinematic = true;
 
             yield return new WaitForSeconds(1);
@@ -122,7 +126,34 @@ public class KidPatience : MonoBehaviour
             chairRigidBody.useGravity = true;
             chairRigidBody.AddForce(throwDirection * throwingForce, ForceMode.Impulse);
             chairRigidBody.AddTorque(throwDirection * throwingForce / 3, ForceMode.Impulse);
-     //   }
+            yield return kidNavigation.Wander(2);
+        }
     }
-    
+
+    private void StopCrying()
+    {            
+        if (cryCoroutine != null)
+        {
+            print("Cry coroutine: " + cryCoroutine);
+            cryCoroutine.CancelCoroutine();
+            kidNavigation.StopWalking();
+            chair.transform.parent.SetParent(null);
+            chairRigidBody.isKinematic = false;
+            _spriteRenderer.sprite = happyFace;
+            cryCoroutine = null;
+        }
+    }
+
+    private int _amountOfSpanks;
+    [ContextMenu("Take damage test")]
+    public void TakeDamage() // работает
+    {
+        _amountOfSpanks++;
+        if (_amountOfSpanks == 1)
+        {
+            print("amount of spanks: " + _amountOfSpanks);
+            StopCrying();
+        }
+        _amountOfSpanks = 0;
+    }
 }

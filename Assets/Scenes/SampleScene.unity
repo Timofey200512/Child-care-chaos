@@ -707,6 +707,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chair holder (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7103069866027337653, guid: 477187bbf58972e44ae1794940c2a536, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8075777671648546534, guid: c214ffc884416414ca3979787de22d4c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2290,7 +2294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd47c888e31a8845b6e1097abdea766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  patienceSeconds: 6
+  patienceSeconds: 1.5
   happyFace: {fileID: 21300000, guid: 0859df7202a1020479a1a3fefaf53b89, type: 3}
   neutralFace: {fileID: 21300000, guid: ed9bd2a653101bd478a7313439dd2e92, type: 3}
   sadFace: {fileID: 21300000, guid: 2a08bd16283c8934b8bb70b412da3b5b, type: 3}
@@ -2348,7 +2352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1899b73472a73664f922943826bdeb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChangeColorHighlight
-  overlapColor: {r: 1, g: 0, b: 0, a: 1}
+  overlapColor: {r: 0.2076124, g: 1, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &644669461
 MonoBehaviour:
@@ -2374,8 +2378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
-  minTimeBetweenWaits: 3
-  maxTimeBetweenWaits: 6
+  minTimeBetweenWaits: 1
+  maxTimeBetweenWaits: 2
 --- !u!136 &644669463
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2799,6 +2803,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4768021642413227933, guid: ca01eb7d96b074443bb65e1ab67ebae1, type: 3}
   m_PrefabInstance: {fileID: 790026364}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &798204169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3988357028335969437, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+  m_PrefabInstance: {fileID: 3224254542027139669}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &798204175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798204169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ee53a41a3cd485449bc9cf1b04ba038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  beltSprite: {fileID: 7576011095104966051, guid: 0244397bc93888543b0e90b0b3fb97f2, type: 3}
+  spanker: {fileID: 0}
 --- !u!1001 &798836593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7817,6 +7840,75 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
+--- !u!1001 &3224254542027139669
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1125659751792525773, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: overlapColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125659751792525773, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: overlapColor.r
+      value: 0.39387143
+      objectReference: {fileID: 0}
+    - target: {fileID: 7652950336379247693, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_Name
+      value: Belt holder
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.095286
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5280046818155971928, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3988357028335969437, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 798204175}
+  m_SourcePrefab: {fileID: 100100000, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
 --- !u!1001 &5435717368153929747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7898,3 +7990,4 @@ SceneRoots:
   - {fileID: 1476530090}
   - {fileID: 186375305}
   - {fileID: 1824873614}
+  - {fileID: 3224254542027139669}

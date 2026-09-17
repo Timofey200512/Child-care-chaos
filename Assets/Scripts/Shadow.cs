@@ -72,7 +72,7 @@ public class Shadow : MonoBehaviour
         {
             return;
         }
-        print("updating shadow position");
+        
         transform.position = new Vector3(
             target.position.x,
             highestSurfaceY + shadowVisualLift,

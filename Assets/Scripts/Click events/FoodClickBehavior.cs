@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class FoodClickBehavior : MonoBehaviour, ILeftClickable, IDropable
+public class FoodClickBehavior : MonoBehaviour, IActionClickable, IDropable
 {
     private Sprite sprite;
 
@@ -16,9 +16,9 @@ public class FoodClickBehavior : MonoBehaviour, ILeftClickable, IDropable
         transform.position = newPosition;
     }
 
-    public void OnLeftButtonClicked()
+    public void OnActionButtonPressed()
     {
         transform.parent.gameObject.SetActive(false);
-        PlayerHolder.instance.Hold(gameObject, sprite);
+        PlayerHolder.instance.Hold(gameObject, sprite);        
     }
 }
