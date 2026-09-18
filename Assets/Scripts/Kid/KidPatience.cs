@@ -31,6 +31,7 @@ public class KidPatience : MonoBehaviour
 
     private void Awake()
     {
+        _changeColorHighlight = GetComponent<ChangeColorHighlight>();
         surface = GameObject.FindAnyObjectByType<NavMeshSurface>();
         kidNavigation = GetComponent<KidNavigation>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -152,9 +153,12 @@ public class KidPatience : MonoBehaviour
     }
 
     private int _amountOfSpanks;
+    private ChangeColorHighlight _changeColorHighlight;
+
     [ContextMenu("Take damage test")]
     public void TakeDamage() // работает
     {
+        _changeColorHighlight.enabled = false;
         FlashDamageRed();
         _amountOfSpanks++;
         print("amount of spanks: " + _amountOfSpanks);
@@ -181,7 +185,6 @@ public class KidPatience : MonoBehaviour
         yield return new WaitForSeconds(damageRedSeconds);
         _spriteRenderer.color = _defaultColor;
         damageFlashCoroutine = null;
+        _changeColorHighlight.enabled = true;
     }
-    
-    
 }

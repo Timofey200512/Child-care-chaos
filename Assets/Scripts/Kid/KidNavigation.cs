@@ -32,7 +32,6 @@ public class KidNavigation : MonoBehaviour
                 continue;
             }
 
-            print("wander");
             Vector3 randomPosition = GetRandomPointOnNavMesh();
             _agent.SetDestination(randomPosition);
 
@@ -40,10 +39,8 @@ public class KidNavigation : MonoBehaviour
             {
                 if (_isGoingToTarget)
                 {
-                    print("stop wandering");
                     break;
                 }
-                print("lalal");
 
                 yield return null;
             }

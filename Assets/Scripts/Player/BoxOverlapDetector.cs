@@ -8,9 +8,9 @@ public class BoxOverlapDetector : MonoBehaviour
     [SerializeField] private Vector3 overlapBoxOffset;
     [SerializeField] private Vector3 overlapBoxSize = Vector3.one;
     private bool boxOverlapped;
-    private Collider collider;
+    private Collider oldCollider;
     public event Action<Collider> OnOverlap;
-    public event Action OnOnOverlap;
+    public event Action OnNoOverlap;
     private void Start()
     {
         _playerMovement = GetComponent<PlayerMovement>();
@@ -19,21 +19,30 @@ public class BoxOverlapDetector : MonoBehaviour
         InputGetter.instance.OnActionMousePressed += OnActionMousePressed;
     }
     
+    Collider[] colliders;
+
     // Update is called once per frame
     void Update()
     {
-        Collider[] colliders = DetectOverlaps();
+        colliders = DetectOverlaps();
 
-        collider = FindClosestCollider(colliders);
-        if (collider)
+        Collider newCollider = FindClosestCollider(colliders);
+        if (newCollider == oldCollider)
         {
-            boxOverlapped = true;
-            OnOverlap?.Invoke(collider);
+            return;
         }
-        else
+
+        if (oldCollider)
         {
-            boxOverlapped = false;
-            OnOnOverlap?.Invoke();
+            OnNoOverlap?.Invoke();
+        }
+
+        oldCollider = newCollider;
+        boxOverlapped = oldCollider;
+
+        if (oldCollider)
+        {
+            OnOverlap?.Invoke(oldCollider);
         }
     }
 
@@ -59,12 +68,13 @@ public class BoxOverlapDetector : MonoBehaviour
             overlapBoxOffset.y, overlapBoxOffset.z);
     }
 
-    public Collider[] DetectOverlaps()
+    private Collider[] DetectOverlaps()
     {
         return Physics.OverlapBox(
-            transform.position + GetFacingOffset(),
-            overlapBoxSize / 2,
-            Quaternion.identity);
+        transform.position + GetFacingOffset(),
+        overlapBoxSize / 2,
+            Quaternion.identity,
+        ~(1 << gameObject.layer));
     }
     
     private void OnDrawGizmosSelected()
@@ -80,7 +90,7 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped && !PlayerHolder.instance.GotItem)
         {
-            collider.GetComponent<ILeftClickable>()?.OnLeftButtonClicked();
+            oldCollider.GetComponent<ILeftClickable>()?.OnLeftButtonClicked();
         }
     }
     
@@ -88,7 +98,7 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped)
         {
-            collider.GetComponent<IActionClickable>()?.OnActionButtonPressed();
+            oldCollider.GetComponent<IActionClickable>()?.OnActionButtonPressed();
         }
     }
     
@@ -100,4 +110,15 @@ public class BoxOverlapDetector : MonoBehaviour
         }
     }
 
+    public void OnComponentDetected<TComponent>(Action<TComponent> callback)
+    {
+        foreach (var collider in colliders)
+        {
+            if (collider.TryGetComponent(out TComponent component))
+            {
+                callback(component);
+                return;
+            }
+        }   
+    }
 }

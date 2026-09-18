@@ -12,7 +12,7 @@ public class Highlighter : MonoBehaviour
     {
         _boxOverlapDetector = GetComponent<BoxOverlapDetector>();
         _boxOverlapDetector.OnOverlap += Highlight;
-        _boxOverlapDetector.OnOnOverlap += DeHighlight;
+        _boxOverlapDetector.OnNoOverlap += DeHighlight;
     }
 
     private void Highlight(Collider collider)

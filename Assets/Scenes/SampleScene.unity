@@ -1163,9 +1163,9 @@ GameObject:
   - component: {fileID: 409441305}
   - component: {fileID: 409441306}
   - component: {fileID: 409441309}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1298,8 +1298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4503c738ed4b874e9f0844cd559e4fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxOverlapDetector
-  overlapBoxOffset: {x: 1.04, y: 1, z: 0}
-  overlapBoxSize: {x: 1, y: 1.86, z: 1}
+  overlapBoxOffset: {x: 0.56, y: 1, z: 0}
+  overlapBoxSize: {x: 1.53, y: 1.86, z: 1.59}
 --- !u!136 &409441307
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1978,7 +1978,7 @@ GameObject:
   m_Component:
   - component: {fileID: 561483628}
   - component: {fileID: 561483629}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2202,7 +2202,7 @@ GameObject:
   - component: {fileID: 644669463}
   m_Layer: 0
   m_Name: kid 1
-  m_TagString: Untagged
+  m_TagString: Kid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

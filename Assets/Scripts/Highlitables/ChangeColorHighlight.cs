@@ -12,9 +12,19 @@ public class ChangeColorHighlight : MonoBehaviour, IHighlightable
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
+    private void OnDisable()
+    {
+        print("disabling change color: " + name);
+        OnDeHighlighted();
+    }
+
     public void OnHighlighted()
     {
-        _spriteRenderer.color = overlapColor;
+        if (enabled)
+        {   
+            _spriteRenderer.color = overlapColor;
+        }
     }
     
     public void OnDeHighlighted()
