@@ -7,6 +7,7 @@ public class KidDesiresManager : MonoBehaviour
     [SerializeField] private float maxTimeBetweenWaits = 8f;
     private KidNavigation kidNavigation;
     private KidPatience _kidPatience;
+    [SerializeField] private float wanderTimeSeconds;
 
     private void Awake()
     {
@@ -28,6 +29,10 @@ public class KidDesiresManager : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(minTimeBetweenWaits, maxTimeBetweenWaits));
             yield return _kidPatience.StartWaiting();
             print("exited waiting");
+            //yield return kidNavigation.Wander(wanderTimeSeconds); лучше новерное так
+            
         }
     }
+    
+
 }

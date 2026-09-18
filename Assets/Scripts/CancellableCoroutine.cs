@@ -1,25 +1,41 @@
 using System.Collections;
+using UnityEngine;
 
 public class CancellableCoroutine
 {
-    private bool _stopped;
-    private readonly IEnumerator _enumerator;
+    private MonoBehaviour _runner;
+    private Coroutine _coroutine;
 
-    public CancellableCoroutine(IEnumerator enumerator)
+    private bool IsRunning { get; set; }
+
+    public CancellableCoroutine(MonoBehaviour runner, IEnumerator routine)
     {
-        _enumerator = enumerator;
+        _runner = runner;
+        _coroutine = _runner.StartCoroutine(Run(routine));
     }
 
-    public IEnumerator Run()
+    private IEnumerator Run(IEnumerator routine)
     {
-        while (!_stopped && _enumerator.MoveNext())
-        {
-            yield return _enumerator.Current;
-        }
+        IsRunning = true;
+
+        yield return routine;
+
+        IsRunning = false;
+        _coroutine = null;
     }
 
-    public void CancelCoroutine()
+    public void Cancel()
     {
-        _stopped = true;
+        if (_coroutine == null) return;
+        _runner.StopCoroutine(_coroutine);
+
+        _coroutine = null;
+        IsRunning = false;
+    }
+
+    public IEnumerator Wait()
+    {
+        while (IsRunning)
+            yield return null;
     }
 }

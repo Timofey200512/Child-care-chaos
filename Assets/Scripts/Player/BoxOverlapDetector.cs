@@ -22,10 +22,7 @@ public class BoxOverlapDetector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Collider[] colliders = Physics.OverlapBox(
-            transform.position + GetFacingOffset(),
-            overlapBoxSize / 2,
-            Quaternion.identity);
+        Collider[] colliders = DetectOverlaps();
 
         collider = FindClosestCollider(colliders);
         if (collider)
@@ -58,7 +55,16 @@ public class BoxOverlapDetector : MonoBehaviour
 
     private Vector3 GetFacingOffset()
     {
-        return new Vector3(Mathf.Abs(overlapBoxOffset.x) * _playerMovement.GetFacingDirection(), overlapBoxOffset.y, overlapBoxOffset.z);
+        return new Vector3(Mathf.Abs(overlapBoxOffset.x) * _playerMovement.GetFacingDirection(), 
+            overlapBoxOffset.y, overlapBoxOffset.z);
+    }
+
+    public Collider[] DetectOverlaps()
+    {
+        return Physics.OverlapBox(
+            transform.position + GetFacingOffset(),
+            overlapBoxSize / 2,
+            Quaternion.identity);
     }
     
     private void OnDrawGizmosSelected()

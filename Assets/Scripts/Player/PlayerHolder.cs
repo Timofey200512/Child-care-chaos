@@ -13,12 +13,14 @@ public class PlayerHolder : MonoBehaviour
     private GameObject originalItem;
 
     private bool gotItem;
+    private Spanker spanker;
     public bool GotItem => gotItem;
 
     public GameObject Item => originalItem;
 
     private void Awake()
     {
+        spanker = GetComponent<Spanker>();
         instance = this;
     }
 
@@ -64,12 +66,12 @@ public class PlayerHolder : MonoBehaviour
         if (originalItem.TryGetComponent<IUsable>(out var usable))
         {
             holdingItem.SetActive(false);          
-            usable.Use();
+            usable.Use(spanker, () => holdingItem.SetActive(true));
         }
     }
 }
 
 public interface IUsable
 {
-    void Use();
+    void Use(Spanker spanker, Action callback);
 }

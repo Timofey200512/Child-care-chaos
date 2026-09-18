@@ -10,7 +10,7 @@ public class KidNavigation : MonoBehaviour
     private NavMeshAgent _agent;
     private bool _isGoingToTarget;
     [SerializeField] private NavMeshSurface surface;
-    [SerializeField] private float idlWaitTimeSeconds = 3f;
+    [SerializeField] private float idleWaitTimeSeconds = 3f;
     
     void Start()
     {
@@ -25,13 +25,14 @@ public class KidNavigation : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0f, idlWaitTimeSeconds));
+            yield return new WaitForSeconds(Random.Range(0f, idleWaitTimeSeconds));
 
             if (_isGoingToTarget)
             {
                 continue;
             }
 
+            print("wander");
             Vector3 randomPosition = GetRandomPointOnNavMesh();
             _agent.SetDestination(randomPosition);
 
@@ -39,8 +40,10 @@ public class KidNavigation : MonoBehaviour
             {
                 if (_isGoingToTarget)
                 {
+                    print("stop wandering");
                     break;
                 }
+                print("lalal");
 
                 yield return null;
             }
@@ -53,7 +56,7 @@ public class KidNavigation : MonoBehaviour
 
         while (Time.time < endTime)
         {
-            float waitEndTime = Time.time + Random.Range(0f, idlWaitTimeSeconds);
+            float waitEndTime = Time.time + Random.Range(0f, idleWaitTimeSeconds);
 
             while (Time.time < waitEndTime && Time.time < endTime)
             {
@@ -89,6 +92,7 @@ public class KidNavigation : MonoBehaviour
             StopWalking();
         }
     }
+    
     private Vector3 GetRandomPointOnNavMesh()
     {
         Bounds bounds = new Bounds(
@@ -137,6 +141,7 @@ public class KidNavigation : MonoBehaviour
 
     public void StopWalking()
     {
-        _agent.SetDestination(transform.position);
+        _agent.ResetPath();
+        _isGoingToTarget = false;
     }
 }

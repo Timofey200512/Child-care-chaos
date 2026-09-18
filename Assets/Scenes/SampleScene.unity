@@ -1332,7 +1332,7 @@ Rigidbody:
   m_GameObject: {fileID: 409441296}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 10
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -1348,7 +1348,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &409441309
 MonoBehaviour:
@@ -1364,6 +1364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   playerPreparesToAttackSprite: {fileID: 2983642798115808518, guid: a5903310d47cde545b9726086c0c5db2, type: 3}
   playerAttackedSprite: {fileID: 5390494424514669673, guid: a2bb4580ded424e4aab5f5f6a89b4bd1, type: 3}
+  attackSpriteStepSeconds: 0.3
 --- !u!1001 &422018996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2340,7 +2341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   surface: {fileID: 934284940}
-  idlWaitTimeSeconds: 3
+  idleWaitTimeSeconds: 3
 --- !u!114 &644669459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2379,8 +2380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
-  minTimeBetweenWaits: 1
-  maxTimeBetweenWaits: 2
+  minTimeBetweenWaits: 5
+  maxTimeBetweenWaits: 10
+  wanderTimeSeconds: 0
 --- !u!136 &644669463
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2822,7 +2824,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   beltSprite: {fileID: 7576011095104966051, guid: 0244397bc93888543b0e90b0b3fb97f2, type: 3}
-  spanker: {fileID: 0}
 --- !u!1001 &798836593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7857,6 +7858,14 @@ PrefabInstance:
       propertyPath: overlapColor.r
       value: 0.39387143
       objectReference: {fileID: 0}
+    - target: {fileID: 6731141736406096392, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_Mass
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6731141736406096392, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 7652950336379247693, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
       propertyPath: m_Name
       value: Belt holder
@@ -7867,7 +7876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.095286
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7899,6 +7908,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7978786315551250906, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8816079750105737466, guid: e9adc8960816b7a4faaf6457c13a2dce, type: 3}
+      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:

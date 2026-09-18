@@ -72,8 +72,8 @@ public class KidPatience : MonoBehaviour
         }
 
         if (satisfied) yield break;
-        cryCoroutine = new CancellableCoroutine(Cry());
-        yield return cryCoroutine.Run();
+        cryCoroutine = new CancellableCoroutine(this, Cry());
+        yield return cryCoroutine.Wait();
     }
 
     public void SatisfyDesire()
@@ -140,7 +140,7 @@ public class KidPatience : MonoBehaviour
         {
             _spriteRenderer.sprite = happyFace;
             print("Cry coroutine: " + cryCoroutine);
-            cryCoroutine.CancelCoroutine(); // something here takes a lot of time
+            cryCoroutine.Cancel(); // something here takes a lot of time
             kidNavigation.StopWalking();
             chair.transform.parent.SetParent(null);
             if (chairRigidBody)
@@ -182,4 +182,6 @@ public class KidPatience : MonoBehaviour
         _spriteRenderer.color = _defaultColor;
         damageFlashCoroutine = null;
     }
+    
+    
 }

@@ -1,9 +1,9 @@
+using System;
 using UnityEngine;
 
 public class BeltClickBehavior : MonoBehaviour, IActionClickable, IDropable, IUsable
 {
     [SerializeField] private Sprite beltSprite;
-    [SerializeField] private Spanker spanker;
     
     public void OnActionButtonPressed()
     {
@@ -17,10 +17,10 @@ public class BeltClickBehavior : MonoBehaviour, IActionClickable, IDropable, IUs
         transform.position = newPosition;
     }
 
-    public void Use()
+    public void Use(Spanker spanker, Action callback = null)
     {
         print("spanking"); 
         // spanking method
-        spanker.Spank();
+        spanker.Spank(callback);
     }
 }
