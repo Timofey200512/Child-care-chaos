@@ -11,6 +11,7 @@ public class DestroyableChair : MonoBehaviour
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        HouseHealth.IncreaseChairAmount();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -27,6 +28,7 @@ public class DestroyableChair : MonoBehaviour
     private void BreakChair()
     {
         _isBroken = true;
+        HouseHealth.DecreaseChairAmount();
 
         _spriteRenderer.sprite = destroyedChair;
         gameObject.tag = "BrokenChair";

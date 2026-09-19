@@ -97,39 +97,42 @@ public class KidPatience : MonoBehaviour
         {
             // find chair
             chair = GameObject.FindWithTag("Chair");
-            print("Crying Cry");
-            // set cry sprite
-            _spriteRenderer.sprite = cryFace;
-            desireBubble.SetActive(false);
-            // go towards chair
-            yield return kidNavigation.GoTowards(chair.transform.position);
-            // grab it
-            chair.transform.parent.SetParent(transform);
-            chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
-            chair.transform.localPosition = Vector3.zero;
+            if (chair)
+            {
+                print("Crying Cry");
+                // set cry sprite
+                _spriteRenderer.sprite = cryFace;
+                desireBubble.SetActive(false);
+                // go towards chair
+                yield return kidNavigation.GoTowards(chair.transform.position);
+                // grab it
+                chair.transform.parent.SetParent(transform);
+                chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
+                chair.transform.localPosition = Vector3.zero;
 
-            chairRigidBody = chair.GetComponent<Rigidbody>();
-            chairRigidBody.isKinematic = true;
+                chairRigidBody = chair.GetComponent<Rigidbody>();
+                chairRigidBody.isKinematic = true;
 
-            yield return new WaitForSeconds(1);
-            surface.BuildNavMesh();
+                yield return new WaitForSeconds(1);
+                surface.BuildNavMesh();
             
-            // throw it
-            chair.transform.parent.SetParent(null);
-            chairRigidBody.isKinematic = false;
-            chair.transform.localScale = new Vector3(1f, 1f, 1f);
+                // throw it
+                chair.transform.parent.SetParent(null);
+                chairRigidBody.isKinematic = false;
+                chair.transform.localScale = new Vector3(1f, 1f, 1f);
             
-            var angle = Random.Range(minThrowAngle, 90f);
-            var direction = Random.insideUnitCircle.normalized;
+                var angle = Random.Range(minThrowAngle, 90f);
+                var direction = Random.insideUnitCircle.normalized;
             
-            Vector3 throwDirection = new Vector3(
-                direction.x * Mathf.Cos(angle * Mathf.Deg2Rad),
-                Mathf.Sin(angle * Mathf.Deg2Rad),
-                direction.y * Mathf.Cos(angle * Mathf.Deg2Rad)
-            );
-            chairRigidBody.useGravity = true;
-            chairRigidBody.AddForce(throwDirection * throwingForce, ForceMode.Impulse);
-            chairRigidBody.AddTorque(throwDirection * throwingForce / 3, ForceMode.Impulse);
+                Vector3 throwDirection = new Vector3(
+                    direction.x * Mathf.Cos(angle * Mathf.Deg2Rad),
+                    Mathf.Sin(angle * Mathf.Deg2Rad),
+                    direction.y * Mathf.Cos(angle * Mathf.Deg2Rad)
+                );
+                chairRigidBody.useGravity = true;
+                chairRigidBody.AddForce(throwDirection * throwingForce, ForceMode.Impulse);
+                chairRigidBody.AddTorque(throwDirection * throwingForce / 3, ForceMode.Impulse);
+            }
             yield return kidNavigation.Wander(2);
         }
     }
