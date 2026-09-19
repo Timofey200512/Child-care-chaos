@@ -5,13 +5,11 @@ public class KidDesiresManager : MonoBehaviour
 {
     [SerializeField] private float minTimeBetweenWaits = 3f;
     [SerializeField] private float maxTimeBetweenWaits = 8f;
-    private KidNavigation kidNavigation;
     private KidPatience _kidPatience;
     [SerializeField] private float wanderTimeSeconds;
 
     private void Awake()
     {
-        kidNavigation = GetComponent<KidNavigation>();
         _kidPatience = GetComponent<KidPatience>();
     }
 

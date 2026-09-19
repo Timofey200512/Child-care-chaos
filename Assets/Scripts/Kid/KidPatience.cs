@@ -45,7 +45,6 @@ public class KidPatience : MonoBehaviour
     public IEnumerator StartWaiting()
     {
         satisfied = false;
-        print("Starting waiting");
         desireBubble.SetActive(true);
         desireSpriteRenderer.sprite = desire;
         
@@ -94,10 +93,10 @@ public class KidPatience : MonoBehaviour
     private Rigidbody chairRigidBody;
     private IEnumerator Cry()
     {
-        // find chair
-        chair = GameObject.FindWithTag("Chair");
-        while (!satisfied)
+        while (true)
         {
+            // find chair
+            chair = GameObject.FindWithTag("Chair");
             print("Crying Cry");
             // set cry sprite
             _spriteRenderer.sprite = cryFace;
@@ -154,18 +153,22 @@ public class KidPatience : MonoBehaviour
 
     private int _amountOfSpanks;
     private ChangeColorHighlight _changeColorHighlight;
+    [SerializeField] private int spanksAmountToCalmDown = 3;
 
     [ContextMenu("Take damage test")]
-    public void TakeDamage() // работает
+    public void TakeDamage() // работает 
     {
-        _changeColorHighlight.enabled = false;
-        FlashDamageRed();
-        _amountOfSpanks++;
-        print("amount of spanks: " + _amountOfSpanks);
-        if (_amountOfSpanks == 1)
+        if (cryCoroutine != null)
         {
-            StopCrying();
-            _amountOfSpanks = 0;
+            _changeColorHighlight.enabled = false;
+            FlashDamageRed();
+            _amountOfSpanks++;
+            print("amount of spanks: " + _amountOfSpanks);
+            if (_amountOfSpanks == spanksAmountToCalmDown)
+            {
+                StopCrying();
+                _amountOfSpanks = 0;
+            }
         }
     }
 

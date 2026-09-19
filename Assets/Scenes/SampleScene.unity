@@ -2306,6 +2306,7 @@ MonoBehaviour:
   damageRedSeconds: 0.5
   minThrowAngle: 20
   throwingForce: 5
+  spanksAmountToCalmDown: 3
 --- !u!195 &644669457
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3422,7 +3423,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7785,6 +7786,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2974506381452039311, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
+      propertyPath: overlapColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2974506381452039311, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
+      propertyPath: overlapColor.r
+      value: 0.13563764
+      objectReference: {fileID: 0}
     - target: {fileID: 3944559119206648002, guid: e820c5af3977dd94492f06bcab5d540a, type: 3}
       propertyPath: m_Name
       value: fridge

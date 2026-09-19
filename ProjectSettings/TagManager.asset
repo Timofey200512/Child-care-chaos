@@ -7,6 +7,7 @@ TagManager:
   - Food
   - Chair
   - Kid
+  - BrokenChair
   layers:
   - Default
   - TransparentFX

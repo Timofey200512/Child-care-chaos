@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3806191836790977291}
   - component: {fileID: 4747190186455266612}
   - component: {fileID: 1075374394285729581}
+  - component: {fileID: 1326337415998656203}
   m_Layer: 0
   m_Name: Chair front
   m_TagString: Chair
@@ -159,6 +160,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 48
   m_CollisionDetection: 0
+--- !u!114 &1326337415998656203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178418090044947101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 824bf84dae4239c4f894e902e7e74144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  destroyedChair: {fileID: 6141225896717512138, guid: 59ff274ae6c082c4f82fef8bc208cdba, type: 3}
+  breakingVelocity: 5
 --- !u!1 &6544916342399738076
 GameObject:
   m_ObjectHideFlags: 0
