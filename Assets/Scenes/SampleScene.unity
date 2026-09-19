@@ -2519,14 +2519,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 644669453}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.83, y: 0, z: -2.18}
-  m_LocalScale: {x: 1, y: 1.4241, z: 1}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1844391867}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1585221293}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!114 &644669456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,12 +2545,6 @@ MonoBehaviour:
   sadFace: {fileID: 21300000, guid: 2a08bd16283c8934b8bb70b412da3b5b, type: 3}
   desireBubble: {fileID: 1909380867}
   desireSpriteRenderer: {fileID: 1813022224}
-  desire: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
-  cryFace: {fileID: -7475459481402553172, guid: 96637e2a71002e642ad8a776a01639f3, type: 3}
-  damageRedSeconds: 0.5
-  minThrowAngle: 20
-  throwingForce: 5
-  spanksAmountToCalmDown: 3
 --- !u!195 &644669457
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2628,6 +2622,15 @@ MonoBehaviour:
   minTimeBetweenWaits: 5
   maxTimeBetweenWaits: 10
   wanderTimeSeconds: 0
+  foodDesire: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
+  surface: {fileID: 934284940}
+  cryFace: {fileID: -7475459481402553172, guid: 96637e2a71002e642ad8a776a01639f3, type: 3}
+  desireBubble: {fileID: 1909380867}
+  throwingForce: 6
+  damageRedSeconds: 0.25
+  minThrowAngle: 20
+  happyFace: {fileID: 21300000, guid: 0859df7202a1020479a1a3fefaf53b89, type: 3}
+  spanksAmountToCalmDown: 3
 --- !u!136 &644669463
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6952,6 +6955,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4768021642413227933, guid: ca01eb7d96b074443bb65e1ab67ebae1, type: 3}
   m_PrefabInstance: {fileID: 1493441286}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1585221292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1585221293}
+  m_Layer: 0
+  m_Name: Kid holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1585221293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585221292}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.48, y: 0, z: -1.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 644669455}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1589742973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8747,7 +8782,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 409441298}
-  - {fileID: 644669455}
   - {fileID: 1654895200}
   - {fileID: 29301289}
   - {fileID: 798836593}
@@ -8768,3 +8802,4 @@ SceneRoots:
   - {fileID: 3224254542027139669}
   - {fileID: 1644974216}
   - {fileID: 2081070996}
+  - {fileID: 1585221293}

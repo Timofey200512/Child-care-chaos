@@ -1,9 +1,6 @@
+using System;
 using System.Collections;
-using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.Windows;
-using NavMeshPlus.Components;
-using NavMeshSurface = NavMeshPlus.Components.NavMeshSurface;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(KidNavigation))]
@@ -16,45 +13,35 @@ public class KidPatience : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private float _changeTimeSeconds;
-    private Color _defaultColor;
-    private Coroutine damageFlashCoroutine;
 
     [SerializeField] private GameObject desireBubble;
     [SerializeField] private SpriteRenderer desireSpriteRenderer;
-    [SerializeField] private Sprite desire;
-    [SerializeField] private Sprite cryFace;
-    [SerializeField] private float damageRedSeconds = 0.25f;
-    private KidNavigation kidNavigation;
-    [SerializeField] private float minThrowAngle = 20f;
-    private NavMeshSurface surface;
     private CancellableCoroutine cryCoroutine;
 
     private void Awake()
     {
-        _changeColorHighlight = GetComponent<ChangeColorHighlight>();
-        surface = GameObject.FindAnyObjectByType<NavMeshSurface>();
-        kidNavigation = GetComponent<KidNavigation>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _defaultColor = _spriteRenderer.color;
         _changeTimeSeconds = patienceSeconds / 3f;
     }
-    
-    private bool satisfied;
-    [SerializeField] private float throwingForce = 1;
 
-    public IEnumerator StartWaiting()
+    public IEnumerator StartWaiting(KidDesire desire)
     {
-        satisfied = false;
         desireBubble.SetActive(true);
-        desireSpriteRenderer.sprite = desire;
+        desireSpriteRenderer.sprite = desire.Image;
         
         _spriteRenderer.sprite = happyFace;
 
         float elapsedSeconds = 0f;
         int emotionStage = 0;
 
-        while (elapsedSeconds < patienceSeconds && !satisfied)
+        while (elapsedSeconds < patienceSeconds)
         {
+            if (desire.Satisfied())
+            {
+                FinishWaiting();
+                yield break;
+            }
+            
             elapsedSeconds += Time.deltaTime;
 
             if (emotionStage == 0 && elapsedSeconds >= _changeTimeSeconds)
@@ -70,17 +57,9 @@ public class KidPatience : MonoBehaviour
 
             yield return null;
         }
-
-        if (satisfied) yield break;
-        cryCoroutine = new CancellableCoroutine(this, Cry());
+        
+        cryCoroutine = new CancellableCoroutine(this, desire.NotSatisfiedAction());
         yield return cryCoroutine.Wait();
-    }
-
-    public void SatisfyDesire()
-    {
-        print("Satisfied Desire");
-        satisfied = true;
-        FinishWaiting();
     }
 
     private void FinishWaiting()
@@ -88,109 +67,33 @@ public class KidPatience : MonoBehaviour
         desireBubble.SetActive(false);
         _spriteRenderer.sprite = happyFace;
     }
+}
 
-    private GameObject chair;
-    private Rigidbody chairRigidBody;
-    private IEnumerator Cry()
+public abstract class KidDesire
+{
+    public Sprite Image => image;
+    protected Sprite image;
+
+    public abstract bool Satisfied();
+    public abstract void Reset();
+    public abstract IEnumerator NotSatisfiedAction();
+}
+
+public class SleepDesire : KidDesire
+{
+    public override bool Satisfied()
     {
-        while (true)
-        {
-            // find chair
-            chair = GameObject.FindWithTag("Chair");
-            if (chair)
-            {
-                print("Crying Cry");
-                // set cry sprite
-                _spriteRenderer.sprite = cryFace;
-                desireBubble.SetActive(false);
-                // go towards chair
-                yield return kidNavigation.GoTowards(chair.transform.position);
-                // grab it
-                chair.transform.parent.SetParent(transform);
-                chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
-                chair.transform.localPosition = Vector3.zero;
-
-                chairRigidBody = chair.GetComponent<Rigidbody>();
-                chairRigidBody.isKinematic = true;
-
-                yield return new WaitForSeconds(1);
-                surface.BuildNavMesh();
-            
-                // throw it
-                chair.transform.parent.SetParent(null);
-                chairRigidBody.isKinematic = false;
-                chair.transform.localScale = new Vector3(1f, 1f, 1f);
-            
-                var angle = Random.Range(minThrowAngle, 90f);
-                var direction = Random.insideUnitCircle.normalized;
-            
-                Vector3 throwDirection = new Vector3(
-                    direction.x * Mathf.Cos(angle * Mathf.Deg2Rad),
-                    Mathf.Sin(angle * Mathf.Deg2Rad),
-                    direction.y * Mathf.Cos(angle * Mathf.Deg2Rad)
-                );
-                chairRigidBody.useGravity = true;
-                chairRigidBody.AddForce(throwDirection * throwingForce, ForceMode.Impulse);
-                chairRigidBody.AddTorque(throwDirection * throwingForce / 3, ForceMode.Impulse);
-            }
-            yield return kidNavigation.Wander(2);
-        }
+        throw new System.NotImplementedException();
     }
 
-    private void StopCrying()
-    {            
-        if (cryCoroutine != null)
-        {
-            _spriteRenderer.sprite = happyFace;
-            print("Cry coroutine: " + cryCoroutine);
-            cryCoroutine.Cancel(); // something here takes a lot of time
-            kidNavigation.StopWalking();
-            chair.transform.parent.SetParent(null);
-            if (chairRigidBody)
-            {
-                chairRigidBody.isKinematic = false;
-            }
-            cryCoroutine = null;
-        }
+    public override void Reset()
+    {
+        throw new System.NotImplementedException();
     }
 
-    private int _amountOfSpanks;
-    private ChangeColorHighlight _changeColorHighlight;
-    [SerializeField] private int spanksAmountToCalmDown = 3;
-
-    [ContextMenu("Take damage test")]
-    public void TakeDamage() // работает 
+    public override IEnumerator NotSatisfiedAction()
     {
-        if (cryCoroutine != null)
-        {
-            _changeColorHighlight.enabled = false;
-            FlashDamageRed();
-            _amountOfSpanks++;
-            print("amount of spanks: " + _amountOfSpanks);
-            if (_amountOfSpanks == spanksAmountToCalmDown)
-            {
-                StopCrying();
-                _amountOfSpanks = 0;
-            }
-        }
-    }
-
-    private void FlashDamageRed()
-    {
-        if (damageFlashCoroutine != null)
-        {
-            StopCoroutine(damageFlashCoroutine);
-        }
-
-        damageFlashCoroutine = StartCoroutine(DamageFlash());
-    }
-
-    private IEnumerator DamageFlash()
-    {
-        _spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(damageRedSeconds);
-        _spriteRenderer.color = _defaultColor;
-        damageFlashCoroutine = null;
-        _changeColorHighlight.enabled = true;
+        throw new NotImplementedException();
     }
 }
+

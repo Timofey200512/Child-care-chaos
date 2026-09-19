@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -69,9 +68,9 @@ public class PlayerHolder : MonoBehaviour
             usable.Use(spanker, () => holdingItem.SetActive(true));
         }
     }
-}
 
-public interface IUsable
-{
-    void Use(Spanker spanker, Action callback);
+    public bool HoldsItemOfTag(string tag)
+    {
+        return Item && Item.CompareTag(tag);
+    }
 }
