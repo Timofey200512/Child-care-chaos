@@ -1,24 +1,30 @@
 using System;
 using UnityEngine;
 
-public class FoodClickBehavior : MonoBehaviour, IActionClickable, IDropable
+public class FoodClickBehavior : Item
 {
-    private Sprite sprite;
+    private SpriteRenderer spriteRenderer;
 
-    private void Start()
+    protected override void Awake()
     {
-        sprite = GetComponent<SpriteRenderer>().sprite;
+        base.Awake();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void OnDrop(Vector3 newPosition)
+    protected override void OnPickedUp()
+    {
+        PlayerHolder.instance.Hold(this, spriteRenderer);
+    }
+
+    protected override void OnDropped(Vector3 newPosition)
     {
         transform.parent.gameObject.SetActive(true);
         transform.position = newPosition;
     }
 
-    public void OnActionButtonPressed()
-    {
-        transform.parent.gameObject.SetActive(false);
-        PlayerHolder.instance.Hold(gameObject, sprite);        
+    private void OnDestroy()
+    {   
+        Destroy(parent.gameObject);
+        Destroy(gameObject);
     }
 }

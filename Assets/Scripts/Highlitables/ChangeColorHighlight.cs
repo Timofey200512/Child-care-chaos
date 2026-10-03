@@ -15,7 +15,6 @@ public class ChangeColorHighlight : MonoBehaviour, IHighlightable
 
     private void OnDisable()
     {
-        print("disabling change color: " + name);
         OnDeHighlighted();
     }
 

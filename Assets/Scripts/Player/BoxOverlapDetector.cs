@@ -8,7 +8,7 @@ public class BoxOverlapDetector : MonoBehaviour
     [SerializeField] private Vector3 overlapBoxOffset;
     [SerializeField] private Vector3 overlapBoxSize = Vector3.one;
     private bool boxOverlapped;
-    private Collider oldCollider;
+    private Collider overlapedCollider;
     public event Action<Collider> OnOverlap;
     public event Action OnNoOverlap;
     private void Start()
@@ -27,22 +27,22 @@ public class BoxOverlapDetector : MonoBehaviour
         colliders = DetectOverlaps();
 
         Collider newCollider = FindClosestCollider(colliders);
-        if (newCollider == oldCollider)
+        if (newCollider == overlapedCollider)
         {
             return;
         }
 
-        if (oldCollider)
+        if (overlapedCollider)
         {
             OnNoOverlap?.Invoke();
         }
 
-        oldCollider = newCollider;
-        boxOverlapped = oldCollider;
+        overlapedCollider = newCollider;
+        boxOverlapped = overlapedCollider;
 
-        if (oldCollider)
+        if (overlapedCollider)
         {
-            OnOverlap?.Invoke(oldCollider);
+            OnOverlap?.Invoke(overlapedCollider);
         }
     }
 
@@ -90,7 +90,7 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped && !PlayerHolder.instance.GotItem)
         {
-            oldCollider.GetComponent<ILeftClickable>()?.OnLeftButtonClicked();
+            overlapedCollider.GetComponent<ILeftClickable>()?.OnLeftButtonClicked();
         }
     }
     
@@ -98,7 +98,14 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped)
         {
-            oldCollider.GetComponent<IActionClickable>()?.OnActionButtonPressed();
+            // Item item = oldCollider.GetComponentInParent<Item>();
+            // if (!item)
+            // {
+            //     item = oldCollider.GetComponentInChildren<Item>();
+            // }
+            //
+            
+            overlapedCollider.GetComponent<IActionButtonClickable>()?.OnActionButtonPressed();
         }
     }
     

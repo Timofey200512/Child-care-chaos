@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using NavMeshPlus.Components;
 using UnityEngine;
@@ -8,88 +7,162 @@ using Random = UnityEngine.Random;
 public class KidNavigation : MonoBehaviour
 {
     private NavMeshAgent _agent;
-    private bool _isGoingToTarget;
+
     [SerializeField] private NavMeshSurface surface;
     [SerializeField] private float idleWaitTimeSeconds = 3f;
-    
-    void Start()
+
+    private CancellableCoroutine _currentMovement;
+    private bool canWalk = true;
+
+    private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+    }
 
+    private void Start()
+    {
         StartCoroutine(Wander());
     }
 
+    // ---------------- PUBLIC MOVEMENT ----------------
+
     public IEnumerator Wander()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(0f, idleWaitTimeSeconds));
-
-            if (_isGoingToTarget)
-            {
-                continue;
-            }
-
-            Vector3 randomPosition = GetRandomPointOnNavMesh();
-            _agent.SetDestination(randomPosition);
-
-            while (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance)
-            {
-                if (_isGoingToTarget)
-                {
-                    break;
-                }
-
-                yield return null;
-            }
-        }
+        return StartMovement(WanderRoutine(float.PositiveInfinity));
     }
 
-    public IEnumerator Wander(float wanderTimeSecond)
+    public IEnumerator Wander(float seconds)
     {
-        float endTime = Time.time + wanderTimeSecond;
+        return StartMovement(WanderRoutine(seconds));
+    }
 
-        while (Time.time < endTime)
+    public IEnumerator GoTowards(Vector3 position)
+    {
+        return StartMovement(GoTowardsRoutine(position));
+    }
+
+    private IEnumerator StartMovement(IEnumerator movement)
+    {
+        CancelMovement();
+
+        _currentMovement = new CancellableCoroutine(movement);
+        if (!canWalk)
         {
-            float waitEndTime = Time.time + Random.Range(0f, idleWaitTimeSeconds);
+            _currentMovement.Pause();
+        }
+        yield return _currentMovement;
+    }
 
-            while (Time.time < waitEndTime && Time.time < endTime)
+    // ---------------- WANDER ----------------
+
+    private IEnumerator WanderRoutine(float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float waitTime = Random.Range(0f, idleWaitTimeSeconds);
+
+            yield return CancellableCoroutine.Wait(waitTime);
+
+            elapsed += waitTime;
+
+            if (elapsed >= duration)
+                yield break;
+
+            if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
             {
                 yield return null;
-            }
-
-            if (Time.time >= endTime)
-            {
-                break;
-            }
-
-            if (_isGoingToTarget)
-            {
                 continue;
             }
 
-            Vector3 randomPosition = GetRandomPointOnNavMesh();
-            _agent.SetDestination(randomPosition);
+            _agent.SetDestination(GetRandomPointOnNavMesh());
 
-            while ((_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance) && Time.time < endTime)
+            while (_agent.pathPending ||
+                   _agent.remainingDistance > _agent.stoppingDistance)
             {
-                if (_isGoingToTarget)
-                {
-                    break;
-                }
-
                 yield return null;
             }
         }
-
-        if (!_isGoingToTarget)
-        {
-            StopWalking();
-        }
     }
-    
+
+    private Vector3 destination;
+    // ---------------- GO TOWARDS ----------------
+
+    private IEnumerator GoTowardsRoutine(Vector3 newPosition)
+    {
+
+        if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
+        {
+            yield break;
+        }
+
+        destination = newPosition;
+        if (NavMesh.SamplePosition(
+                newPosition,
+                out NavMeshHit hit,
+                1f,
+                NavMesh.AllAreas))
+        {
+            newPosition = hit.position;
+        }
+
+        if (!_agent.SetDestination(newPosition))
+        {
+            yield break;
+        }
+
+        while (_agent.pathPending ||
+               _agent.remainingDistance > _agent.stoppingDistance)
+        {
+
+            yield return null;
+        }
+
+    }
+
+    // ---------------- CONTROL ----------------
+
+    public void StopWalking()
+    {
+        _currentMovement?.Pause();
+        canWalk = false;
+        print("pausing current movement: " + _currentMovement);
+        
+        if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            _agent.isStopped = true;
+    }
+
+    public void KeepWalking()
+    {
+        _agent.SetDestination(destination);
+        _currentMovement?.Resume();
+        canWalk = true;
+        
+        print("continuing current movement: " + _currentMovement);
+        if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            _agent.isStopped = false;
+    }
+
+    private void CancelMovement()
+    {
+        _currentMovement?.Cancel();
+        _currentMovement = null;
+
+        ClearPath();
+    }
+
+    private void ClearPath()
+    {
+        if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            _agent.ResetPath();
+    }
+
+    // ---------------- NAVMESH ----------------
+
     private Vector3 GetRandomPointOnNavMesh()
     {
         Bounds bounds = new Bounds(
@@ -98,12 +171,16 @@ public class KidNavigation : MonoBehaviour
 
         for (int i = 0; i < 30; i++)
         {
-            Vector3 randomPoint = new Vector3(Random.Range(bounds.min.x, bounds.max.x),
-                Random.Range(bounds.min.y, bounds.max.y), 0f);
+            Vector3 randomPoint = new Vector3(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y, bounds.max.y),
+                0f);
 
-            if (NavMesh.SamplePosition(randomPoint, 
+            if (NavMesh.SamplePosition(
+                    randomPoint,
                     out NavMeshHit hit,
-                    0.5f, NavMesh.AllAreas))
+                    0.5f,
+                    NavMesh.AllAreas))
             {
                 return hit.position;
             }
@@ -112,33 +189,8 @@ public class KidNavigation : MonoBehaviour
         return bounds.center;
     }
 
-    public IEnumerator GoTowards(Vector3 newPosition)
+    private void OnDisable()
     {
-        Vector3 destination = newPosition;
-        if (NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas))
-        {
-            destination = hit.position;
-        }
-
-        _isGoingToTarget = true;
-        _agent.SetDestination(destination);
-
-        while (_agent.pathPending)
-        {
-            yield return null;
-        }
-
-        while (_agent.isOnNavMesh && _agent.remainingDistance > _agent.stoppingDistance)
-        {
-            yield return null;
-        }
-
-        _isGoingToTarget = false;
-    }
-
-    public void StopWalking()
-    {
-        _agent.ResetPath();
-        _isGoingToTarget = false;
+        CancelMovement();
     }
 }

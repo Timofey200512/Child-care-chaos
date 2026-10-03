@@ -41,6 +41,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 297424580430966555}
     m_Modifications:
+    - target: {fileID: -4186638621482499611, guid: 16c13211e96dc4748b0abeb5c5f5a815, type: 3}
+      propertyPath: shadow
+      value: 
+      objectReference: {fileID: 7034431550547535708}
     - target: {fileID: 4321504379399135264, guid: 16c13211e96dc4748b0abeb5c5f5a815, type: 3}
       propertyPath: m_Name
       value: food desire_0
@@ -231,5 +235,10 @@ PrefabInstance:
 --- !u!4 &4610040131579530466 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4742359773576990533, guid: c92d6a8467ec847448b47c59ca000bd5, type: 3}
+  m_PrefabInstance: {fileID: 9091105210209616807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7034431550547535708 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2284814008476296443, guid: c92d6a8467ec847448b47c59ca000bd5, type: 3}
   m_PrefabInstance: {fileID: 9091105210209616807}
   m_PrefabAsset: {fileID: 0}

@@ -2,5 +2,5 @@ using System;
 
 public interface IUsable
 {
-    void Use(Spanker spanker, Action callback);
+    void Use(BoxOverlapDetector overlapBoxDetector);
 }

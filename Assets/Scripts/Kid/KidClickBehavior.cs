@@ -2,37 +2,48 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class KidClickBehavior : MonoBehaviour, IDropable, IActionClickable
+public class KidClickBehavior : Item
 {
     private KidNavigation _kidNavigation;
     private NavMeshAgent _agent;
-    private Sprite kidSprite;
+    private SpriteRenderer kidSpriteRenderer;
     public Action OnKidPressed;
+    private KidDesiresManager kidDesiresManager;
+    private KidPatience _kidPatience;
 
-    private void Start()
+    private void Awake()
     {
-        kidSprite = GetComponent<SpriteRenderer>().sprite;
+        base.Awake();
+        _kidPatience = GetComponent<KidPatience>();
+        kidDesiresManager = GetComponent<KidDesiresManager>();
+        kidSpriteRenderer = GetComponent<SpriteRenderer>();
         _kidNavigation = GetComponent<KidNavigation>();
         _agent = GetComponent<NavMeshAgent>();
     }
 
-    public void OnActionButtonPressed()
+    public override void OnActionButtonPressed()
     {
-        if (PlayerHolder.instance.GotItem)
+        if (PlayerHolder.instance.GotItem && !_kidPatience.IsCrying)
         {
             OnKidPressed?.Invoke();
         }
-        else
+        else if (!PlayerHolder.instance.GotItem)
         {
-            _agent.enabled = false;
-            PlayerHolder.instance.Hold(gameObject, kidSprite);
+            SetPickedUp(true);
+            OnPickedUp();
         }
     }
+    
+    protected override void OnPickedUp()
+    {
+        //kidDesiresManager.enabled = false;
+        _kidNavigation.StopWalking();
+        PlayerHolder.instance.Hold(this, kidSpriteRenderer);
+    }
 
-    public void OnDrop(Vector3 newPosition)
+    protected override void OnDropped(Vector3 newPosition)
     {
         _agent.Warp(newPosition);
-        _agent.enabled = true;
-        StartCoroutine(_kidNavigation.Wander());
+        _kidNavigation.KeepWalking();
     }
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class FoodDesire : KidDesire
 {
-    private readonly KidDesiresManager _kidDesiresManager;
+    private readonly KidPatience _kidPatience;
     private bool _satisfied;
-    public FoodDesire(KidDesiresManager kidDesiresManager, Sprite sprite, KidClickBehavior kidClickBehavior)
+    public FoodDesire(KidPatience kidPatience, Sprite sprite, KidClickBehavior kidClickBehavior)
     {
-        _kidDesiresManager = kidDesiresManager;
+        _kidPatience = kidPatience;
         image = sprite;
         kidClickBehavior.OnKidPressed = UpdateSatisfiedStatus;
     }
@@ -20,7 +20,7 @@ public class FoodDesire : KidDesire
         _satisfied = true;
     }
     
-    public override bool Satisfied()
+    public override bool IsSatisfied()
     {
         return _satisfied;
     }
@@ -30,5 +30,5 @@ public class FoodDesire : KidDesire
         _satisfied = false;
     }
 
-    public override IEnumerator NotSatisfiedAction() => _kidDesiresManager.Cry();
+    public override IEnumerator NotSatisfiedAction() => _kidPatience.Cry();
 }

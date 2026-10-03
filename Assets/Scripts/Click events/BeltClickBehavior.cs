@@ -1,26 +1,31 @@
-using System;
 using UnityEngine;
 
-public class BeltClickBehavior : MonoBehaviour, IActionClickable, IDropable, IUsable
+public class BeltClickBehavior : Item, IUsable
 {
-    [SerializeField] private Sprite beltSprite;
+    private SpriteRenderer spriteRenderer;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     
-    public void OnActionButtonPressed()
+    protected override void OnPickedUp()
     {
         transform.parent.gameObject.SetActive(false);
-        PlayerHolder.instance.Hold(gameObject, beltSprite);
+        PlayerHolder.instance.Hold(this, spriteRenderer);
     }
 
-    public void OnDrop(Vector3 newPosition)
+    protected override void OnDropped(Vector3 newPosition)
     {
         transform.parent.gameObject.SetActive(true);
         transform.position = newPosition;
     }
 
-    public void Use(Spanker spanker, Action callback = null)
+    public void Use(BoxOverlapDetector overlapBoxDetector)
     {
         print("spanking"); 
         // spanking method
-        spanker.Spank(callback);
+        //overlapBoxDetector.Spank(callback);
     }
 }

@@ -1,13 +1,20 @@
-using System;
 using UnityEngine;
 
-public class FridgeClickBehavior : MonoBehaviour, IActionClickable
+public class FridgeClickBehavior : MonoBehaviour, IActionButtonClickable
 {
     [SerializeField] private GameObject food;
-    [SerializeField] private Sprite foodSprite;
 
     public void OnActionButtonPressed()
     {
-        PlayerHolder.instance.Hold(Instantiate(food), foodSprite);
+        var foodItem = Instantiate(food);
+        FoodClickBehavior foodClickBehavior = foodItem.GetComponentInChildren<FoodClickBehavior>();
+        //SpriteRenderer foodSpriteRenderer = foodClickBehavior1.GetComponent<SpriteRenderer>();
+        //PlayerHolder.instance.Hold(foodClickBehavior1.gameObject, foodSpriteRenderer);
+        foodClickBehavior.OnActionButtonPressed();
     }
+}
+
+public interface IActionButtonClickable
+{
+    public void OnActionButtonPressed();
 }

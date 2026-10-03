@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,17 +11,18 @@ public class PlayerHolder : MonoBehaviour
     [SerializeField] private Sprite holdingPlayerSprite;
     [SerializeField] private Sprite defaultPlayerSprite;
     [SerializeField] private GameObject holdingItem;   
-    private GameObject originalItem;
+    private Item originalItem;
 
     private bool gotItem;
-    private Spanker spanker;
+    private BoxOverlapDetector overlapBoxDetector;
+    private int originalItemSortingOrder;
+    private string originalItemSortingLayerName;
+    private SpriteRenderer originalItemSpriteRenderer;
     public bool GotItem => gotItem;
-
-    public GameObject Item => originalItem;
 
     private void Awake()
     {
-        spanker = GetComponent<Spanker>();
+        overlapBoxDetector = GetComponent<BoxOverlapDetector>();
         instance = this;
     }
 
@@ -30,24 +33,36 @@ public class PlayerHolder : MonoBehaviour
         InputGetter.instance.OnLeftMousePressed += UseHoldingItem;
     }
 
-    public void Hold(GameObject item, Sprite sprite)
-    {
-         item.gameObject.SetActive(false);
-         holdingItem.SetActive(true);
-         _playerSpriteRenderer.sprite = holdingPlayerSprite;
-         holdingItemSpriteRenderer.sprite = sprite;
-         originalItem = item;
-         gotItem = true;
+    public void Hold(Item item, SpriteRenderer spriteRenderer)
+    { 
+        originalItemSortingOrder = spriteRenderer.sortingOrder;
+        originalItemSortingLayerName = spriteRenderer.sortingLayerName;
+        originalItemSpriteRenderer = spriteRenderer;
+        spriteRenderer.sortingLayerName = _playerSpriteRenderer.sortingLayerName;
+        spriteRenderer.sortingOrder = _playerSpriteRenderer.sortingOrder + 1;
+        //item.gameObject.SetActive(false);
+        //holdingItem.SetActive(true);
+        _playerSpriteRenderer.sprite = holdingPlayerSprite;
+        //holdingItemSpriteRenderer.sprite = sprite;
+        item.transform.SetParent(gameObject.transform);
+        item.transform.localScale = new Vector3(Mathf.Abs(item.transform.localScale.x), 
+            item.transform.localScale.y, item.transform.localScale.z);
+        item.transform.localPosition = holdingItem.transform.localPosition;
+        originalItem = item;
+        gotItem = true;
     }
 
     public void Drop()
     {
-        holdingItem.SetActive(false);
+        //holdingItem.SetActive(false);
         _playerSpriteRenderer.sprite = defaultPlayerSprite;
-        originalItem.gameObject.SetActive(true);
+        originalItemSpriteRenderer.sortingLayerName = originalItemSortingLayerName;
+        originalItemSpriteRenderer.sortingOrder = originalItemSortingOrder;
+        //originalItem.gameObject.SetActive(true);
+        //originalItem.transform.
         var newPosition = holdingItem.transform.position;
-        print("new position: " + newPosition);
-        Item.GetComponentInChildren<IDropable>().OnDrop(newPosition);
+        originalItem.transform.SetParent(null);
+        originalItem.OnDrop(newPosition);
         gotItem = false;
     }
 
@@ -62,15 +77,15 @@ public class PlayerHolder : MonoBehaviour
     private void UseHoldingItem()
     {
         if (!gotItem) return;
-        if (originalItem.TryGetComponent<IUsable>(out var usable))
+        if (originalItem.GetComponentInChildren<IUsable>() is IUsable usable)
         {
             holdingItem.SetActive(false);          
-            usable.Use(spanker, () => holdingItem.SetActive(true));
+            usable.Use(overlapBoxDetector);
         }
     }
 
     public bool HoldsItemOfTag(string tag)
     {
-        return Item && Item.CompareTag(tag);
+        return originalItem && originalItem.CompareTag(tag);
     }
 }

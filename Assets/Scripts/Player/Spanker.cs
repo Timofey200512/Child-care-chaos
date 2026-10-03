@@ -39,7 +39,7 @@ public class Spanker : MonoBehaviour
         _spriteRenderer.sprite = playerAttackedSprite;
         yield return new WaitForSeconds(attackSpriteStepSeconds);
         
-        _overlapDetector.OnComponentDetected<KidDesiresManager>(kidDesiresManager => kidDesiresManager.TakeDamage());
+        _overlapDetector.OnComponentDetected<KidPatience>(kidPatience => kidPatience.TakeDamage());
 
         _spriteRenderer.sprite = defaultSprite;
         _isAttacking = false;
