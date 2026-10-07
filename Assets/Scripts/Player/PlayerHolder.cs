@@ -40,10 +40,7 @@ public class PlayerHolder : MonoBehaviour
         originalItemSpriteRenderer = spriteRenderer;
         spriteRenderer.sortingLayerName = _playerSpriteRenderer.sortingLayerName;
         spriteRenderer.sortingOrder = _playerSpriteRenderer.sortingOrder + 1;
-        //item.gameObject.SetActive(false);
-        //holdingItem.SetActive(true);
         _playerSpriteRenderer.sprite = holdingPlayerSprite;
-        //holdingItemSpriteRenderer.sprite = sprite;
         item.transform.SetParent(gameObject.transform);
         item.transform.localScale = new Vector3(Mathf.Abs(item.transform.localScale.x), 
             item.transform.localScale.y, item.transform.localScale.z);
@@ -52,18 +49,16 @@ public class PlayerHolder : MonoBehaviour
         gotItem = true;
     }
 
-    public void Drop()
+    public Item Drop()
     {
-        //holdingItem.SetActive(false);
         _playerSpriteRenderer.sprite = defaultPlayerSprite;
         originalItemSpriteRenderer.sortingLayerName = originalItemSortingLayerName;
         originalItemSpriteRenderer.sortingOrder = originalItemSortingOrder;
-        //originalItem.gameObject.SetActive(true);
-        //originalItem.transform.
         var newPosition = holdingItem.transform.position;
         originalItem.transform.SetParent(null);
         originalItem.OnDrop(newPosition);
         gotItem = false;
+        return originalItem;
     }
 
     public void DeleteItem()

@@ -37,7 +37,15 @@ public abstract class Item : MonoBehaviour, IActionButtonClickable
         {
             rigidBody.isKinematic = pickedUp;
         }
-        shadow.SetActive(!pickedUp);
+        SetShadowActive(!pickedUp);
+    }
+
+    public void SetShadowActive(bool active)
+    {
+        if (shadow != null)
+        {
+            shadow.SetActive(active);
+        }
     }
 
     protected abstract void OnPickedUp();

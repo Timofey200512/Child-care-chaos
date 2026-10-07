@@ -98,13 +98,6 @@ public class BoxOverlapDetector : MonoBehaviour
     {
         if (boxOverlapped)
         {
-            // Item item = oldCollider.GetComponentInParent<Item>();
-            // if (!item)
-            // {
-            //     item = oldCollider.GetComponentInChildren<Item>();
-            // }
-            //
-            
             overlapedCollider.GetComponent<IActionButtonClickable>()?.OnActionButtonPressed();
         }
     }

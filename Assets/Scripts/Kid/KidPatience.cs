@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using NavMeshPlus.Components;
 using UnityEngine;
@@ -32,11 +31,12 @@ public class KidPatience : MonoBehaviour
         _changeColorHighlight = GetComponent<ChangeColorHighlight>();
         _changeTimeSeconds = patienceSeconds / 3f;
     }
-
+    private Coroutine wanderingCoroutine; 
     public IEnumerator StartWaiting(KidDesire desire)
     {
         //kidNavigation.KeepWalking();
-        StartCoroutine(kidNavigation.Wander());
+        wanderingCoroutine = StartCoroutine(kidNavigation.Wander());
+        //wanderingCoroutine.Resume();
         desireBubble.SetActive(true);
         desireSpriteRenderer.sprite = desire.Image;
 
@@ -49,6 +49,7 @@ public class KidPatience : MonoBehaviour
         {
             if (desire.IsSatisfied())
             {
+                //desire.SetSatisfied();
                 FinishWaiting();
                 yield break;
             }
@@ -69,14 +70,16 @@ public class KidPatience : MonoBehaviour
             yield return null;
         }
 
-        cryCoroutine = new CancellableCoroutine(desire.NotSatisfiedAction());
-        yield return cryCoroutine;
+        cryCoroutine = desire.SetUnsatisfied();
+        FinishWaiting();
     }
 
     private void FinishWaiting()
     {
         desireBubble.SetActive(false);
         _spriteRenderer.sprite = happyFace;
+        //kidNavigation.StopWalking();
+        StopCoroutine(wanderingCoroutine);
     }
 
     private GameObject chair;
@@ -85,8 +88,10 @@ public class KidPatience : MonoBehaviour
     [SerializeField] private float throwingForce = 1;
     [SerializeField] private float damageRedSeconds = 0.25f;
     [SerializeField] private float minThrowAngle = 20f;
+    [SerializeField, Min(0f)] private float chairGrabDistance = 1f;
     public IEnumerator Cry()
     {
+        kidNavigation.KeepWalking();
         IsCrying = true;
         while (true)
         {
@@ -94,13 +99,23 @@ public class KidPatience : MonoBehaviour
             chair = GetRandomChair();
             if (chair)
             {
-                //print("Crying Cry");
                 // set cry sprite
                 _spriteRenderer.sprite = cryFace;
                 desireBubble.SetActive(false);
-                // go towards chair
-                //kidNavigation.StopWalking();
-                yield return kidNavigation.GoTowards(chair.transform.position);
+                // Keep approaching this chair until it is close enough to grab.
+                while (chair && (chair.transform.position - transform.position).sqrMagnitude >
+                       chairGrabDistance * chairGrabDistance)
+                {
+                    yield return kidNavigation.GoTowards(chair.transform.position);
+                    // Allow a frame before retrying if movement ended without arrival.
+                    yield return null;
+                }
+
+                if (!chair)
+                {
+                    continue;
+                }
+
                 // grab it
                 chair.transform.parent.SetParent(transform);
                 chair.transform.parent.localPosition = new Vector3(0f, 1f, 0f);
@@ -140,17 +155,15 @@ public class KidPatience : MonoBehaviour
     }
 
     [ContextMenu("Take damage test")]
-    public void TakeDamage() // работает
+    public void TakeDamage()
     {
         if (cryCoroutine != null)
         {
             _changeColorHighlight.enabled = false;
             FlashDamageRed();
             _currentDamage++;
-            //print("amount of spanks: " + _currentDamage);
             if (_currentDamage == totalHealth)
             {
-               // print("stop crying");
                 StopCrying();
                 _currentDamage = 0;
             }
@@ -164,7 +177,6 @@ public class KidPatience : MonoBehaviour
         {
             _spriteRenderer.sprite = happyFace;
             cryCoroutine.Cancel();
-            //walkingTowardsCoroutine.Cancel();
             kidNavigation.Wander();
             chair.transform.parent.SetParent(null);
             if (chairRigidBody)
@@ -180,7 +192,6 @@ public class KidPatience : MonoBehaviour
     [SerializeField] private int totalHealth = 3;
 
     private Coroutine damageFlashCoroutine;
-    //private CancellableCoroutine walkingTowardsCoroutine;
 
     private void FlashDamageRed()
     {
@@ -199,33 +210,5 @@ public class KidPatience : MonoBehaviour
         _spriteRenderer.color = _defaultColor;
         damageFlashCoroutine = null;
         _changeColorHighlight.enabled = true;
-    }
-}
-
-public abstract class KidDesire
-{
-    public Sprite Image => image;
-    protected Sprite image;
-
-    public abstract bool IsSatisfied();
-    public abstract void Reset();
-    public abstract IEnumerator NotSatisfiedAction();
-}
-
-public class SleepDesire : KidDesire
-{
-    public override bool IsSatisfied()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void Reset()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override IEnumerator NotSatisfiedAction()
-    {
-        throw new NotImplementedException();
     }
 }

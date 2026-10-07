@@ -22,10 +22,10 @@ public class KidNavigation : MonoBehaviour
         _agent.updateUpAxis = false;
     }
 
-    private void Start()
-    {
-        StartCoroutine(Wander());
-    }
+    // private void Start()
+    // {
+    //     StartCoroutine(Wander());
+    // }
 
     // ---------------- PUBLIC MOVEMENT ----------------
 
@@ -94,7 +94,6 @@ public class KidNavigation : MonoBehaviour
 
     private IEnumerator GoTowardsRoutine(Vector3 newPosition)
     {
-
         if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
         {
             yield break;

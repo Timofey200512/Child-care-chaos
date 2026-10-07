@@ -6,11 +6,15 @@ public class KidDesiresManager : MonoBehaviour
     [SerializeField] private float minTimeBetweenWaits = 3f;
     [SerializeField] private float maxTimeBetweenWaits = 8f;
     private KidPatience _kidPatience;
-    [SerializeField] private float wanderTimeSeconds;
+    //[SerializeField] private float wanderTimeSeconds;
     private KidDesire[] _desires;
     [SerializeField] private Sprite foodDesire;
+    [SerializeField] private Sprite sleepingSprite;
+    [SerializeField, Min(0f)] private float minSleepTime = 3f;
+    [SerializeField, Min(0f)] private float maxSleepTime = 8f;
     private KidClickBehavior _kidClickBehavior;
     private KidNavigation kidNavigation;
+    [SerializeField] private Sprite sleepingDesire;
 
     private void Awake()
     {
@@ -20,7 +24,12 @@ public class KidDesiresManager : MonoBehaviour
 
     private void Start()
     {
-        _desires = new[] { new FoodDesire(_kidPatience, foodDesire, _kidClickBehavior) };
+        _desires = new KidDesire[]
+        {
+            new FoodDesire(_kidPatience, foodDesire, _kidClickBehavior),
+            new SleepDesire(_kidPatience, GetComponent<SpriteRenderer>(),
+                sleepingSprite, minSleepTime, maxSleepTime, sleepingDesire)
+        };
         StartCoroutine(RunDesires());
     }
 
@@ -31,7 +40,9 @@ public class KidDesiresManager : MonoBehaviour
             // пока не чего не происходит и пока wait for seconds возврощается ребенок гуляет из за wander функции которая
             // вызвана в kid navigation в начале
             yield return new WaitForSeconds(Random.Range(minTimeBetweenWaits, maxTimeBetweenWaits));
-            yield return _kidPatience.StartWaiting(ChooseRandomDesire());
+            var  desire = ChooseRandomDesire();
+            yield return _kidPatience.StartWaiting(desire);
+            yield return desire.ActivateAftermath();
             print("exited waiting");
             //yield return kidNavigation.Wander(3);
             //yield return kidNavigation.Wander(wanderTimeSeconds); лучше новерное так

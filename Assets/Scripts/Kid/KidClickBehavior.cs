@@ -8,6 +8,7 @@ public class KidClickBehavior : Item
     private NavMeshAgent _agent;
     private SpriteRenderer kidSpriteRenderer;
     public Action OnKidPressed;
+    public event Action OnPutToSleep;
     private KidDesiresManager kidDesiresManager;
     private KidPatience _kidPatience;
 
@@ -34,9 +35,14 @@ public class KidClickBehavior : Item
         }
     }
     
+    public void PutToSleep()
+    {
+        _kidNavigation.StopWalking();
+        OnPutToSleep?.Invoke();
+    }
+
     protected override void OnPickedUp()
     {
-        //kidDesiresManager.enabled = false;
         _kidNavigation.StopWalking();
         PlayerHolder.instance.Hold(this, kidSpriteRenderer);
     }

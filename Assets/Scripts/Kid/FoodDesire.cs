@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ public class FoodDesire : KidDesire
         
         PlayerHolder.instance.DeleteItem();
         _satisfied = true;
+        SetSatisfied();
     }
     
     public override bool IsSatisfied()
@@ -30,5 +32,26 @@ public class FoodDesire : KidDesire
         _satisfied = false;
     }
 
-    public override IEnumerator NotSatisfiedAction() => _kidPatience.Cry();
+    private IEnumerator aftermath;
+
+    public override IEnumerator ActivateAftermath()
+    {
+        yield return aftermath;
+    }
+
+    public override CancellableCoroutine SetUnsatisfied()
+    {
+        aftermath = new CancellableCoroutine(_kidPatience.Cry());
+        return (CancellableCoroutine)aftermath;
+    }
+
+    public override void SetSatisfied()
+    {
+        aftermath = StopWantingFood();
+    }
+
+    private IEnumerator StopWantingFood()
+    {
+        yield break;
+    }
 }
