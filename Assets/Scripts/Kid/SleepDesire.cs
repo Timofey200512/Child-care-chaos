@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SleepDesire : KidDesire
 {
-    private readonly KidPatience _kidPatience;
     private readonly KidClickBehavior kidClickBehavior;
-    private readonly KidNavigation kidNavigation;
     private readonly SpriteRenderer spriteRenderer;
     private readonly Sprite _sleepingKidSprite;
     private readonly Sprite defaultSprite;
@@ -13,12 +14,11 @@ public class SleepDesire : KidDesire
     private readonly float maxSleepTime;
     private bool _satisfied;
     private IEnumerator aftermath;
+    public event Action OnSleep;
 
     public SleepDesire(KidPatience kidPatience, SpriteRenderer spriteRenderer,
         Sprite sleepingKidSprite, float minSleepTime, float maxSleepTime, Sprite sleepingDesire)
     {
-        _kidPatience = kidPatience;
-        kidNavigation = kidPatience.GetComponent<KidNavigation>();
         this.spriteRenderer = spriteRenderer;
         this._sleepingKidSprite = sleepingKidSprite;
         defaultSprite = spriteRenderer.sprite;
@@ -45,7 +45,6 @@ public class SleepDesire : KidDesire
 
     public override CancellableCoroutine SetUnsatisfied()
     {
-        //var crying = new CancellableCoroutine(_kidPatience.Cry());
         var sleeping = new CancellableCoroutine(Sleep());
         aftermath = sleeping;
         return sleeping;
@@ -53,14 +52,11 @@ public class SleepDesire : KidDesire
 
     private IEnumerator Sleep()
     {
-        kidNavigation.StopWalking();
         kidClickBehavior.SetShadowActive(false);
-        //_kidPatience.StopWaiting();
         spriteRenderer.sprite = _sleepingKidSprite;
         yield return CancellableCoroutine.Wait(Random.Range(minSleepTime, maxSleepTime));
         spriteRenderer.sprite = defaultSprite;
-        kidClickBehavior.SetShadowActive(true);
-        kidNavigation.KeepWalking();
+        OnSleep();
     }
 
     public override void SetSatisfied()

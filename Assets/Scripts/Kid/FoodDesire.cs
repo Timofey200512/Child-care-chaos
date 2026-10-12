@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FoodDesire : KidDesire
 {
-    private readonly KidPatience _kidPatience;
+    private KidPatience _kidPatience;
     private bool _satisfied;
     public FoodDesire(KidPatience kidPatience, Sprite sprite, KidClickBehavior kidClickBehavior)
     {

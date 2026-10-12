@@ -12,6 +12,7 @@ public class KidNavigation : MonoBehaviour
     [SerializeField] private float idleWaitTimeSeconds = 3f;
 
     private CancellableCoroutine _currentMovement;
+    private CancellableCoroutine _wanderingMovement;
     private bool canWalk = true;
 
     private void Awake()
@@ -22,21 +23,16 @@ public class KidNavigation : MonoBehaviour
         _agent.updateUpAxis = false;
     }
 
-    // private void Start()
-    // {
-    //     StartCoroutine(Wander());
-    // }
-
     // ---------------- PUBLIC MOVEMENT ----------------
 
     public IEnumerator Wander()
     {
-        return StartMovement(WanderRoutine(float.PositiveInfinity));
+        return StartMovement(WanderRoutine(float.PositiveInfinity), true);
     }
 
     public IEnumerator Wander(float seconds)
     {
-        return StartMovement(WanderRoutine(seconds));
+        return StartMovement(WanderRoutine(seconds), true);
     }
 
     public IEnumerator GoTowards(Vector3 position)
@@ -44,11 +40,15 @@ public class KidNavigation : MonoBehaviour
         return StartMovement(GoTowardsRoutine(position));
     }
 
-    private IEnumerator StartMovement(IEnumerator movement)
+    private IEnumerator StartMovement(IEnumerator movement, bool isWandering = false)
     {
         CancelMovement();
 
         _currentMovement = new CancellableCoroutine(movement);
+        if (isWandering)
+        {
+            _wanderingMovement = _currentMovement;
+        }
         if (!canWalk)
         {
             _currentMovement.Pause();
@@ -125,6 +125,17 @@ public class KidNavigation : MonoBehaviour
 
     // ---------------- CONTROL ----------------
 
+    public void StopWandering()
+    {
+        if (_wanderingMovement == null)
+            return;
+
+        _wanderingMovement.Cancel();
+        _wanderingMovement = null;
+        _currentMovement = null;
+        ClearPath();
+    }
+
     public void StopWalking()
     {
         _currentMovement?.Pause();
@@ -148,6 +159,7 @@ public class KidNavigation : MonoBehaviour
 
     private void CancelMovement()
     {
+        _wanderingMovement = null;
         _currentMovement?.Cancel();
         _currentMovement = null;
 

@@ -1476,6 +1476,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoxOverlapDetector
   overlapBoxOffset: {x: 0.56, y: 1, z: 0}
   overlapBoxSize: {x: 1.53, y: 1.86, z: 1.59}
+  detectableLayers:
+    serializedVersion: 2
+    m_Bits: 63
 --- !u!136 &409441307
 CapsuleCollider:
   m_ObjectHideFlags: 0

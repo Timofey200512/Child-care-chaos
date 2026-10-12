@@ -11,6 +11,7 @@ public class BoxOverlapDetector : MonoBehaviour
     private Collider overlapedCollider;
     public event Action<Collider> OnOverlap;
     public event Action OnNoOverlap;
+    [SerializeField] private LayerMask detectableLayers;
     private void Start()
     {
         _playerMovement = GetComponent<PlayerMovement>();
@@ -74,7 +75,7 @@ public class BoxOverlapDetector : MonoBehaviour
         transform.position + GetFacingOffset(),
         overlapBoxSize / 2,
             Quaternion.identity,
-        ~(1 << gameObject.layer));
+        detectableLayers);
     }
     
     private void OnDrawGizmosSelected()

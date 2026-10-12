@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class KidDesiresManager : MonoBehaviour
@@ -6,7 +7,6 @@ public class KidDesiresManager : MonoBehaviour
     [SerializeField] private float minTimeBetweenWaits = 3f;
     [SerializeField] private float maxTimeBetweenWaits = 8f;
     private KidPatience _kidPatience;
-    //[SerializeField] private float wanderTimeSeconds;
     private KidDesire[] _desires;
     [SerializeField] private Sprite foodDesire;
     [SerializeField] private Sprite sleepingSprite;
@@ -15,6 +15,7 @@ public class KidDesiresManager : MonoBehaviour
     private KidClickBehavior _kidClickBehavior;
     private KidNavigation kidNavigation;
     [SerializeField] private Sprite sleepingDesire;
+    private LayerMask originalLayerMask;
 
     private void Awake()
     {
@@ -24,11 +25,14 @@ public class KidDesiresManager : MonoBehaviour
 
     private void Start()
     {
+        originalLayerMask = gameObject.layer;
+        SleepDesire sleepDesire = new SleepDesire(_kidPatience, GetComponent<SpriteRenderer>(),
+            sleepingSprite, minSleepTime, maxSleepTime, sleepingDesire);
+        sleepDesire.OnSleep += DisableOverlap;
         _desires = new KidDesire[]
         {
             new FoodDesire(_kidPatience, foodDesire, _kidClickBehavior),
-            new SleepDesire(_kidPatience, GetComponent<SpriteRenderer>(),
-                sleepingSprite, minSleepTime, maxSleepTime, sleepingDesire)
+            sleepDesire
         };
         StartCoroutine(RunDesires());
     }
@@ -43,6 +47,7 @@ public class KidDesiresManager : MonoBehaviour
             var  desire = ChooseRandomDesire();
             yield return _kidPatience.StartWaiting(desire);
             yield return desire.ActivateAftermath();
+            EnableOverlap();
             print("exited waiting");
             //yield return kidNavigation.Wander(3);
             //yield return kidNavigation.Wander(wanderTimeSeconds); лучше новерное так
@@ -56,4 +61,15 @@ public class KidDesiresManager : MonoBehaviour
         desire.Reset();
         return desire;
     }
+
+    private void EnableOverlap()
+    {
+        gameObject.layer = originalLayerMask;
+    }
+
+    private void DisableOverlap()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Ignore overlap");
+    }
+    
 }

@@ -31,12 +31,9 @@ public class KidPatience : MonoBehaviour
         _changeColorHighlight = GetComponent<ChangeColorHighlight>();
         _changeTimeSeconds = patienceSeconds / 3f;
     }
-    private Coroutine wanderingCoroutine; 
     public IEnumerator StartWaiting(KidDesire desire)
     {
-        //kidNavigation.KeepWalking();
-        wanderingCoroutine = StartCoroutine(kidNavigation.Wander());
-        //wanderingCoroutine.Resume();
+        StartCoroutine(kidNavigation.Wander());
         desireBubble.SetActive(true);
         desireSpriteRenderer.sprite = desire.Image;
 
@@ -49,7 +46,6 @@ public class KidPatience : MonoBehaviour
         {
             if (desire.IsSatisfied())
             {
-                //desire.SetSatisfied();
                 FinishWaiting();
                 yield break;
             }
@@ -78,8 +74,7 @@ public class KidPatience : MonoBehaviour
     {
         desireBubble.SetActive(false);
         _spriteRenderer.sprite = happyFace;
-        //kidNavigation.StopWalking();
-        StopCoroutine(wanderingCoroutine);
+        kidNavigation.StopWandering();
     }
 
     private GameObject chair;
@@ -91,7 +86,7 @@ public class KidPatience : MonoBehaviour
     [SerializeField, Min(0f)] private float chairGrabDistance = 1f;
     public IEnumerator Cry()
     {
-        kidNavigation.KeepWalking();
+        //kidNavigation.KeepWalking();
         IsCrying = true;
         while (true)
         {
