@@ -8,6 +8,8 @@ public class KidDesiresManager : MonoBehaviour
     [SerializeField] private float maxTimeBetweenWaits = 8f;
     private KidPatience _kidPatience;
     private KidDesire[] _desires;
+    private KidDesire currentDesire;
+    public bool WantsToSleep => currentDesire is SleepDesire && !currentDesire.IsSatisfied();
     [SerializeField] private Sprite foodDesire;
     [SerializeField] private Sprite sleepingSprite;
     [SerializeField, Min(0f)] private float minSleepTime = 3f;
@@ -29,6 +31,7 @@ public class KidDesiresManager : MonoBehaviour
         SleepDesire sleepDesire = new SleepDesire(_kidPatience, GetComponent<SpriteRenderer>(),
             sleepingSprite, minSleepTime, maxSleepTime, sleepingDesire);
         sleepDesire.OnSleep += DisableOverlap;
+        sleepDesire.OnAwake += EnableOverlap;
         _desires = new KidDesire[]
         {
             new FoodDesire(_kidPatience, foodDesire, _kidClickBehavior),
@@ -44,10 +47,12 @@ public class KidDesiresManager : MonoBehaviour
             // пока не чего не происходит и пока wait for seconds возврощается ребенок гуляет из за wander функции которая
             // вызвана в kid navigation в начале
             yield return new WaitForSeconds(Random.Range(minTimeBetweenWaits, maxTimeBetweenWaits));
-            var  desire = ChooseRandomDesire();
+            var desire = ChooseRandomDesire();
+            currentDesire = desire;
             yield return _kidPatience.StartWaiting(desire);
+            currentDesire = null;
             yield return desire.ActivateAftermath();
-            EnableOverlap();
+            //EnableOverlap();
             print("exited waiting");
             //yield return kidNavigation.Wander(3);
             //yield return kidNavigation.Wander(wanderTimeSeconds); лучше новерное так

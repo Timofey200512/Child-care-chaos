@@ -4,28 +4,16 @@ using UnityEngine;
 public class BedClickBehavior : MonoBehaviour, IActionButtonClickable
 {
     [SerializeField] private Vector3 kidSleepingPosition;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void OnActionButtonPressed()
     {
-        if (PlayerHolder.instance.HoldsItemOfTag("Kid"))
+        var heldKid = PlayerHolder.instance.HeldItem as KidClickBehavior;
+        if (heldKid != null && heldKid.CanBePutToSleep)
         {
             Item kid = PlayerHolder.instance.Drop();
+            heldKid.PutToSleep();
             kid.transform.SetParent(transform.root);
-            kid.transform.position = kidSleepingPosition;
-            kid.transform.eulerAngles = new Vector3(kid.transform.eulerAngles.x, kid.transform.eulerAngles.y, 90f);
-            kid.GetComponent<KidClickBehavior>().PutToSleep();
+            kid.transform.localPosition = kidSleepingPosition;
         }
     }
 }

@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c03d06e99ac3c64eb0e7d2d8ce2eef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BedClickBehavior
-  kidSleepingPosition: {x: 0.532, y: 0.313, z: 0.121}
+  kidSleepingPosition: {x: 0.09, y: 0.09333343, z: 0.2}
 --- !u!1 &8868709052495392633
 GameObject:
   m_ObjectHideFlags: 0

@@ -2656,8 +2656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8e1d4a484491f8ac77d7ce6c3eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidDesiresManager
-  minTimeBetweenWaits: 1
-  maxTimeBetweenWaits: 1
+  minTimeBetweenWaits: 3
+  maxTimeBetweenWaits: 5
   foodDesire: {fileID: -8897649029018005378, guid: 475864a5efb10a64e93730c9d0f61416, type: 3}
   sleepingSprite: {fileID: -864307383713413571, guid: 10d1c14373bacb2429baf83265581458, type: 3}
   minSleepTime: 2
@@ -6195,6 +6195,10 @@ PrefabInstance:
     - target: {fileID: 2701816386454151148, guid: 100d410fc882aa54baa04c0008567db9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8238060457607285772, guid: 100d410fc882aa54baa04c0008567db9, type: 3}
+      propertyPath: m_Center.z
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8868709052495392633, guid: 100d410fc882aa54baa04c0008567db9, type: 3}
       propertyPath: m_Name

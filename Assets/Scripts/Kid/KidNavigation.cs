@@ -78,7 +78,7 @@ public class KidNavigation : MonoBehaviour
                 yield return null;
                 continue;
             }
-
+            print("seting destination");
             _agent.SetDestination(GetRandomPointOnNavMesh());
 
             while (_agent.pathPending ||

@@ -9,8 +9,9 @@ public class KidClickBehavior : Item
     private SpriteRenderer kidSpriteRenderer;
     public Action OnKidPressed;
     public event Action OnPutToSleep;
-    private KidDesiresManager kidDesiresManager;
     private KidPatience _kidPatience;
+    private KidDesiresManager kidDesiresManager;
+    public bool CanBePutToSleep => kidDesiresManager.WantsToSleep;
 
     private void Awake()
     {

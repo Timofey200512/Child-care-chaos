@@ -19,6 +19,7 @@ public class PlayerHolder : MonoBehaviour
     private string originalItemSortingLayerName;
     private SpriteRenderer originalItemSpriteRenderer;
     public bool GotItem => gotItem;
+    public Item HeldItem => GotItem ? originalItem : null;
 
     private void Awake()
     {
@@ -34,7 +35,7 @@ public class PlayerHolder : MonoBehaviour
     }
 
     public void Hold(Item item, SpriteRenderer spriteRenderer)
-    { 
+    {
         originalItemSortingOrder = spriteRenderer.sortingOrder;
         originalItemSortingLayerName = spriteRenderer.sortingLayerName;
         originalItemSpriteRenderer = spriteRenderer;
@@ -58,7 +59,9 @@ public class PlayerHolder : MonoBehaviour
         originalItem.transform.SetParent(null);
         originalItem.OnDrop(newPosition);
         gotItem = false;
-        return originalItem;
+        var item = originalItem;
+        originalItem = null;
+        return item;
     }
 
     public void DeleteItem()
@@ -67,6 +70,7 @@ public class PlayerHolder : MonoBehaviour
         _playerSpriteRenderer.sprite = defaultPlayerSprite;
         holdingItem.SetActive(false);
         gotItem = false;
+        originalItem = null;
     }
 
     private void UseHoldingItem()
@@ -81,6 +85,8 @@ public class PlayerHolder : MonoBehaviour
 
     public bool HoldsItemOfTag(string tag)
     {
+        print("original item: " + originalItem);
+        print("tag: " + tag);
         return originalItem && originalItem.CompareTag(tag);
     }
 }
