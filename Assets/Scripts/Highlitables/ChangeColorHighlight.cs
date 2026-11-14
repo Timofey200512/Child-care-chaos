@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]

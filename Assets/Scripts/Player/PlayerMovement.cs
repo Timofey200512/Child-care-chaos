@@ -23,6 +23,11 @@ public class PlayerMovement : MonoBehaviour
 
         // flip sprite direction on input change transform is used instead of sprite renderer because
         // children should change their position as well when player is facing different directions
+        UpdateFacingDirection(horizontal);
+    }
+
+    private void UpdateFacingDirection(float horizontal)
+    {
         if (horizontal > 0f)
         {
             float xScale = Mathf.Abs(transform.localScale.x);

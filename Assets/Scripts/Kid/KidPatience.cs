@@ -33,7 +33,6 @@ public class KidPatience : MonoBehaviour
     }
     public IEnumerator StartWaiting(KidDesire desire)
     {
-        StartCoroutine(kidNavigation.Wander());
         desireBubble.SetActive(true);
         desireSpriteRenderer.sprite = desire.Image;
 
@@ -77,6 +76,13 @@ public class KidPatience : MonoBehaviour
         kidNavigation.StopWandering();
     }
 
+    public void StartCrying()
+    {
+        if (IsCrying) return;
+        cryCoroutine = new CancellableCoroutine(Cry());
+        StartCoroutine(cryCoroutine);
+    }
+
     private GameObject chair;
     private Rigidbody chairRigidBody;
     [SerializeField] private Sprite cryFace;
@@ -86,7 +92,6 @@ public class KidPatience : MonoBehaviour
     [SerializeField, Min(0f)] private float chairGrabDistance = 1f;
     public IEnumerator Cry()
     {
-        //kidNavigation.KeepWalking();
         IsCrying = true;
         while (true)
         {
@@ -173,7 +178,8 @@ public class KidPatience : MonoBehaviour
             _spriteRenderer.sprite = happyFace;
             cryCoroutine.Cancel();
             kidNavigation.Wander();
-            chair.transform.parent.SetParent(null);
+            if (chair && chair.transform.parent)
+                chair.transform.parent.SetParent(null);
             if (chairRigidBody)
             {
                 chairRigidBody.isKinematic = false;

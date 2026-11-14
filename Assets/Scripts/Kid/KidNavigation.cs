@@ -184,8 +184,9 @@ public class KidNavigation : MonoBehaviour
         {
             Vector3 randomPoint = new Vector3(
                 Random.Range(bounds.min.x, bounds.max.x),
-                Random.Range(bounds.min.y, bounds.max.y),
-                0f);
+                0,
+                Random.Range(bounds.min.y, bounds.max.y)
+                );
 
             if (NavMesh.SamplePosition(
                     randomPoint,

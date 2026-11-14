@@ -1,0 +1,7 @@
+{
+  "name": "Game.Runtime",
+  "references": [
+    "NavMeshPlus"
+  ],
+  "autoReferenced": true
+}
